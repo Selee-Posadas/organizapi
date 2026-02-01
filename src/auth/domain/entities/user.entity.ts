@@ -7,7 +7,6 @@ export class User {
         public readonly createdAt: Date,
         public updatedAt: Date,
     ) {
-        if (!email.includes('@')) throw new Error('Domain Error: Invalid Email');
         if (passwordHash.length < 8) throw new Error('Domain Error: Insecure Hash');
     }
 
@@ -15,9 +14,9 @@ export class User {
     static createNew(email: string, passwordHash: string, name?: string): User {
         return new User(
             crypto.randomUUID(),
+            name || 'New User',
             email,
             passwordHash,
-            name || 'New User',
             new Date(),
             new Date(),
         );

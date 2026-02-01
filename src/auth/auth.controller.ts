@@ -34,7 +34,7 @@ export class AuthController {
       }
 
       
-      throw new InternalServerErrorException('An error occurred during registration');
+      throw error;
     }
   }
 }
