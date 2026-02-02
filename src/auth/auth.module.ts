@@ -4,6 +4,9 @@ import { BcryptAdapter } from './infrastructure/adapters/bcrypt.adapter';
 import { PrismaUserRepository } from './infrastructure/repositories/prisma-user.repository';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
+import { LoginUseCase } from './application/use-cases/login.use-case';
+import { UserRepository } from './domain/repositories/user.repository';
+import { HashService } from './domain/ports/hash-service.interface';
 
 
 @Module({
@@ -22,14 +25,23 @@ import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
    
     {
       provide: RegisterUserUseCase,
-      useFactory: (userRepo: any, hashService: any) => {
+      useFactory: (userRepo: UserRepository, hashService: HashService) => {
         return new RegisterUserUseCase(userRepo, hashService);
       },
       inject: ['UserRepository', 'HashService'],
     },
 
+    {
+      provide: LoginUseCase,
+      useFactory: (userRepo: UserRepository, hashService: HashService) => {
+        return new LoginUseCase(userRepo, hashService);
+      },
+      inject: ['UserRepository', 'HashService'],
+    },
+
+
     PrismaService,
   ],
-  exports: [RegisterUserUseCase],
+  exports: [RegisterUserUseCase, LoginUseCase],
 })
 export class AuthModule {}

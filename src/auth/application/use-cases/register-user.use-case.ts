@@ -7,7 +7,7 @@ export class RegisterUserUseCase {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
-    ) { }
+    ) {}
 
     async execute(dto: CreateUserDto): Promise<User> {
         const existingUser = await this.userRepository.findByEmail(dto.email);
