@@ -26,7 +26,7 @@ export class LoginUseCase {
             throw new Error('Invalid credentials');
         }
 
-        const token = await this.tokenService.generateToken({ Id: user.id, email: user.email });
+        const token = await this.tokenService.generateToken({ id: user.id, email: user.email });
 
         return{
             user,

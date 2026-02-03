@@ -3,12 +3,16 @@ import {
   Post,
   Body,
   ConflictException,
-  UnauthorizedException
+  UnauthorizedException,
+  Get,
+  Req,
+  UseGuards
 } from '@nestjs/common';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUseCase } from './application/use-cases/login.use-case';
 import { LoginUserDto } from './dto/login-user.dto';
+import { AuthGuard } from './infrastructure/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -61,6 +65,16 @@ export class AuthController {
         throw error;
       }
 
+    }
+  }
+
+  //esto es de prueba, despues borrar
+  @Get('profile')
+  @UseGuards(AuthGuard)
+  async getProfile(@Req() req) {
+    return {
+      message: 'Esto es una prueba de perfil protegido',
+      user: req.user,
     }
   }
 }
