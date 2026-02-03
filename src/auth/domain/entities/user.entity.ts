@@ -6,6 +6,7 @@ export class User {
         public passwordHash: string,
         public readonly createdAt: Date,
         public updatedAt: Date,
+        public readonly avatarId?: string,
     ) {
         if (passwordHash.length < 8) throw new Error('Domain Error: Insecure Hash');
     }

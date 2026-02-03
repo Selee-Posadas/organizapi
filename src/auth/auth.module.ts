@@ -10,6 +10,7 @@ import { HashService } from './domain/ports/hash-service.interface';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAdapter } from './infrastructure/adapters/jwt.adapter';
 import { AuthTokenService } from './domain/ports/auth-token-service.interface';
+import { UpdateProfileUseCase } from './application/use-cases/update-profile.use-case';
 
 
 @Module({
@@ -46,6 +47,14 @@ import { AuthTokenService } from './domain/ports/auth-token-service.interface';
       },
       inject: ['UserRepository', 'HashService', 'AuthTokenService'],
     },
+    {
+      provide: UpdateProfileUseCase,
+      useFactory: (userRepo: UserRepository) => {
+        return new UpdateProfileUseCase(userRepo);
+      },
+      inject: ['UserRepository'],
+    },
+    
     PrismaService,
   ], 
   imports: [

@@ -28,4 +28,15 @@ export class PrismaUserRepository implements UserRepository {
 
     return UserMapper.toDomain(createdUser);
   }
+
+  async update(id: string, data: Partial<User>): Promise<User> {
+    const persistenceData = UserMapper.toPersistencePartial(data);
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: persistenceData,
+    });
+
+    return UserMapper.toDomain(updatedUser);
+  }
+
 }
