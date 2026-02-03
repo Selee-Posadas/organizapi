@@ -1,5 +1,6 @@
-import { User } from "src/auth/domain/entities/user.entity";
+import { AuthTokenService } from "src/auth/domain/ports/auth-token-service.interface";
 import { HashService } from "src/auth/domain/ports/hash-service.interface";
+import { LoginResponse } from "src/auth/domain/ports/login-response.interface";
 import { UserRepository } from "src/auth/domain/repositories/user.repository";
 import { LoginUserDto } from "src/auth/dto/login-user.dto";
 
@@ -8,8 +9,9 @@ export class LoginUseCase {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
+        private readonly tokenService: AuthTokenService,
     ) { }
-    async execute(dto: LoginUserDto): Promise<User> {
+    async execute(dto: LoginUserDto): Promise<LoginResponse> {
 
         const user = await this.userRepository.findByEmail(dto.email);
 
@@ -24,8 +26,12 @@ export class LoginUseCase {
             throw new Error('Invalid credentials');
         }
 
-        return user;
+        const token = await this.tokenService.generateToken({ Id: user.id, email: user.email });
 
+        return{
+            user,
+            accessToken: token,
+        };
     }
 }
 

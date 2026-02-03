@@ -7,6 +7,9 @@ import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 import { LoginUseCase } from './application/use-cases/login.use-case';
 import { UserRepository } from './domain/repositories/user.repository';
 import { HashService } from './domain/ports/hash-service.interface';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAdapter } from './infrastructure/adapters/jwt.adapter';
+import { AuthTokenService } from './domain/ports/auth-token-service.interface';
 
 
 @Module({
@@ -22,6 +25,11 @@ import { HashService } from './domain/ports/hash-service.interface';
       provide: 'UserRepository',
       useClass: PrismaUserRepository,
     },
+
+    {
+      provide: 'AuthTokenService',
+      useClass: JwtAdapter,
+    },
    
     {
       provide: RegisterUserUseCase,
@@ -33,14 +41,26 @@ import { HashService } from './domain/ports/hash-service.interface';
 
     {
       provide: LoginUseCase,
-      useFactory: (userRepo: UserRepository, hashService: HashService) => {
-        return new LoginUseCase(userRepo, hashService);
+      useFactory: (userRepo: UserRepository, hashService: HashService, tokenService: AuthTokenService) => {
+        return new LoginUseCase(userRepo, hashService, tokenService);
       },
-      inject: ['UserRepository', 'HashService'],
+      inject: ['UserRepository', 'HashService', 'AuthTokenService'],
     },
-
-
     PrismaService,
+  ], 
+  imports: [
+    JwtModule.registerAsync({
+      useFactory: () => {
+        const secret = process.env.JWT_SECRET;
+        if (!secret || secret.length === 0) {
+          throw new Error('FATAL: JWT_SECRET environment variable is not defined');
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: '1h' },
+        };
+      },
+    }),
   ],
   exports: [RegisterUserUseCase, LoginUseCase],
 })

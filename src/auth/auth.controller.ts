@@ -46,12 +46,13 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
     try {
-      const user = await this.loginUseCase.execute(loginUserDto);
+      const {user, accessToken} = await this.loginUseCase.execute(loginUserDto);
       const { passwordHash, ...safeUser } = user;
 
       return {
         message: 'Login successful',
         user: safeUser,
+        token: accessToken,
       };
     } catch (error) {
       if (error.message === 'Invalid credentials') {
