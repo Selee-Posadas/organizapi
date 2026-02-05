@@ -1,0 +1,58 @@
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "src/infrastructure/prisma/prisma.service";
+import { Task } from "src/task/domain/entities/task.entity";
+import { TaskRepository } from "src/task/domain/repositories/task.repository";
+import { TaskMapper } from "../mappers/task.mapper";
+
+@Injectable()
+export class PrismaTaskRepository implements TaskRepository {
+    constructor(private readonly prisma: PrismaService) { }
+
+    async createTask(task: Task): Promise<Task> {
+        const data = TaskMapper.toPersistence(task);
+
+        const createdTask = await this.prisma.task.create({
+            data,
+        });
+
+        return TaskMapper.toDomain(createdTask);
+    }
+
+    async findById(id: string): Promise<Task | null> {
+        const task = await this.prisma.task.findUnique({
+            where: { id },
+        });
+
+        if (!task) return null;
+
+        return TaskMapper.toDomain(task);
+    }
+
+
+    async findAllByUserId(userId: string): Promise<Task[]> {
+        const tasks = await this.prisma.task.findMany({
+            where: { userId },
+        });
+        if (!tasks) return [];
+
+        return tasks.map(TaskMapper.toDomain);
+    }
+
+    async updateTask(id: string, task: Partial<Task>): Promise<Task> {
+        const persistenceData = TaskMapper.toPersistencePartial(task);
+
+        const updatedTask = await this.prisma.task.update({
+            where: { id },
+            data: persistenceData,
+        });
+
+        return TaskMapper.toDomain(updatedTask);
+    }
+
+    async deleteTask(id: string): Promise<void> {
+        await this.prisma.task.delete({
+            where: { id },
+        });
+
+    }
+}
