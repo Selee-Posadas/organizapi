@@ -71,6 +71,6 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
       },
     }),
   ],
-  exports: [RegisterUserUseCase, LoginUseCase],
+  exports: [RegisterUserUseCase, LoginUseCase, 'AuthTokenService', UpdateProfileUseCase],
 })
 export class AuthModule {}
