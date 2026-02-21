@@ -18,7 +18,6 @@ model User {
   avatarId      String?  @default("avatar_1")
   task Task[]
   category Category[]
-  AuditLog AuditLog[]
 
   @@map("users")
 }
@@ -46,12 +45,3 @@ model Task {
   category    Category? @relation(fields: [categoryId], references: [id])
 }
 
-model AuditLog {
-  id         String   @id @default(uuid())
-  action     String   
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  resourceId String? 
-  details    String? 
-  createdAt  DateTime @default(now())
-}
