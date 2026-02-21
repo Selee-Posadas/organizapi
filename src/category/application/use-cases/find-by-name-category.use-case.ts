@@ -14,7 +14,7 @@ export class FindCategoryByNameUseCase {
             throw new Error('Category not found');
         }
         if(category.userId !== userId){
-            throw new Error('You do not have permission to edit this recurse')
+            throw new Error('You do not have permission to access to this recurse')
         }
         return category;
     }

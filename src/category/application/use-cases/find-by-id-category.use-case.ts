@@ -7,7 +7,7 @@ export class FindCategoryByIdUseCase{
     ){}
 
     async execute(categoryId:string, userId:string):Promise<Category>{
-        const category = await this.categoryRepository.findById(categoryId);
+        const category = await this.categoryRepository.findById(categoryId, userId);
         if(!category){
             throw new Error('Category not found');
         }

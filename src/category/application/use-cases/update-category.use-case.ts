@@ -8,7 +8,7 @@ export class UpdateCategoryUseCase {
     ){}
 
     async execute(categoryId: string, userId: string, dto: UpdateCategoryDto): Promise<Category>{
-        const existingCategory = await this.categoryRepository.findById(categoryId);
+        const existingCategory = await this.categoryRepository.findById(categoryId, userId);
 
         if(!existingCategory){
             throw new Error('Category not found');
@@ -18,7 +18,7 @@ export class UpdateCategoryUseCase {
             throw new Error('You do not have permission to update this category');
         }
 
-        const updatedCategory = await this.categoryRepository.updateCategory(categoryId, {
+        const updatedCategory = await this.categoryRepository.updateCategory(categoryId, userId, {
             name: dto.name,
             color: dto.color,
         });

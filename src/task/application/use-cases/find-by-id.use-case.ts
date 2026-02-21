@@ -8,7 +8,7 @@ export class FindByIdUseCase {
 
     async execute(taskId: string, userId: string): Promise<Task> {
 
-        const task = await this.taskRepository.findById(taskId);
+        const task = await this.taskRepository.findById(taskId, userId);
         
         if(!task){
             throw new Error('Task not found');

@@ -5,9 +5,9 @@ import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 export class UpdateTaskUseCase {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  async execute(userId: string, taskId: string, dto: UpdateTaskDto): Promise<Task> {
+  async execute( taskId: string, userId: string, dto: UpdateTaskDto): Promise<Task> {
 
-    const existingTask = await this.taskRepository.findById(taskId);
+    const existingTask = await this.taskRepository.findById(taskId, userId);
 
 
     if (!existingTask) {
@@ -20,7 +20,7 @@ export class UpdateTaskUseCase {
     }
 
 
-    const updatedTask = await this.taskRepository.updateTask(taskId, {
+    const updatedTask = await this.taskRepository.updateTask(taskId, userId, {
       title: dto.title,
       description: dto.description,
       status: (dto.status as TaskStatus) || existingTask.status,

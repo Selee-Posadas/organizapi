@@ -18,6 +18,8 @@ model User {
   avatarId      String?  @default("avatar_1")
   task Task[]
   category Category[]
+  career Career[]
+  enrollments   Enrollment[]
 
   @@map("users")
 }
@@ -45,3 +47,33 @@ model Task {
   category    Category? @relation(fields: [categoryId], references: [id])
 }
 
+model Career {
+  id String @id @default(uuid())
+  name String
+  userId   String
+  user     User      @relation(fields: [userId], references: [id])
+  subjects Subject[]
+
+}
+
+model Subject{
+  id String @id @default(uuid())
+  careerId String
+  career Career @relation(fields: [careerId], references: [id])
+  name String
+  yearLevel Int
+  semester Int
+  enrollments Enrollment[]
+}
+
+model Enrollment{
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  subjectId String
+  subject Subject @relation(fields: [subjectId], references: [id])
+  status String
+  finalGrade   Float?
+  academicYear Int
+  createdAt    DateTime @default(now())
+}

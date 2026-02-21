@@ -5,7 +5,7 @@ export class DeleteTaskUseCase {
     constructor(private readonly taskRepository: TaskRepository) {}
 
     async execute(taskId: string, userId: string): Promise<void> {
-        const task = await this.taskRepository.findById(taskId);
+        const task = await this.taskRepository.findById(taskId, userId);
 
         if (!task) {
             throw new Error('Task not found');
@@ -17,6 +17,6 @@ export class DeleteTaskUseCase {
         }
 
 
-        await this.taskRepository.deleteTask(taskId);
+        await this.taskRepository.deleteTask(taskId, userId);
     }
 }
