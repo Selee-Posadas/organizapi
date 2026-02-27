@@ -18,9 +18,11 @@ export class PrismaTaskRepository implements TaskRepository {
         return TaskMapper.toDomain(createdTask);
     }
 
-    async findById(id: string): Promise<Task | null> {
+    async findById(id: string, userId: string): Promise<Task | null> {
         const task = await this.prisma.task.findUnique({
-            where: { id },
+            where: {
+                id_userId: { id, userId }
+            },
         });
 
         if (!task) return null;
@@ -38,20 +40,24 @@ export class PrismaTaskRepository implements TaskRepository {
         return tasks.map(TaskMapper.toDomain);
     }
 
-    async updateTask(id: string, task: Partial<Task>): Promise<Task> {
+    async updateTask(id: string, userId: string, task: Partial<Task>): Promise<Task> {
         const persistenceData = TaskMapper.toPersistencePartial(task);
 
         const updatedTask = await this.prisma.task.update({
-            where: { id },
+            where: { 
+                id_userId: { id, userId }
+            },
             data: persistenceData,
         });
 
         return TaskMapper.toDomain(updatedTask);
     }
 
-    async deleteTask(id: string): Promise<void> {
+    async deleteTask(id: string, userId:string): Promise<void> {
         await this.prisma.task.delete({
-            where: { id },
+            where: { 
+                id_userId: { id, userId }
+             },
         });
 
     }

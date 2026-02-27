@@ -10,7 +10,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
         private readonly prisma: PrismaService
     ) { }
 
-    async createCategory(category: Category): Promise<Category>{
+    async createCategory(category: Category): Promise<Category> {
         const data = CategoryMapper.toPersistence(category);
 
         const createdCategory = await this.prisma.category.create({
@@ -20,37 +20,59 @@ export class PrismaCategoryRepository implements CategoryRepository {
         return CategoryMapper.toDomain(createdCategory);
     }
 
-    async findById(id: string): Promise<Category | null> {
+    async findById(id: string, userId: string): Promise<Category | null> {
         const category = await this.prisma.category.findUnique({
-            where: { id },
+            where: {
+                id_userId: { id, userId }
+            },
         });
-        if(!category) return null;
+        if (!category) return null;
 
         return CategoryMapper.toDomain(category);
     }
-    
+
     async findAllByUserId(userId: string): Promise<Category[]> {
         const categories = await this.prisma.category.findMany({
             where: { userId },
         });
-        if(!categories) return [];
+        if (!categories) return [];
         return categories.map(CategoryMapper.toDomain);
     }
 
-    async updateCategory(id: string, category: Partial<Category>): Promise<Category> {
+    async findCategoryByName(categoryName: string, userId: string): Promise<Category | null> {
+        const category = await this.prisma.category.findFirst({
+            where: {
+                name: {
+                    equals: categoryName,
+                    mode: 'insensitive'
+                },
+                userId: userId
+            },
+        });
+
+        if (!category) return null;
+
+        return CategoryMapper.toDomain(category);
+    }
+
+    async updateCategory(id: string, userId: string, category: Partial<Category>): Promise<Category> {
         const persistenceData = CategoryMapper.toPersistencePartial(category);
 
         const updateCategory = await this.prisma.category.update({
-            where: { id },
+            where: {
+                id_userId: { id, userId }
+            },
             data: persistenceData,
         });
 
         return CategoryMapper.toDomain(updateCategory);
     }
 
-    async deleteCategory(id: string): Promise<void> {
+    async deleteCategory(id: string, userId: string): Promise<void> {
         await this.prisma.category.delete({
-            where: { id },
+            where: {
+                id_userId: { id, userId }
+            },
         });
     }
 }

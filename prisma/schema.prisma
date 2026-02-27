@@ -32,6 +32,8 @@ model Category {
   user       User     @relation(fields: [userId], references: [id])
   task       Task[]
   createdAt   DateTime @default(now())
+
+  @@unique([id, userId])
 }
 
 model Task {
@@ -45,6 +47,8 @@ model Task {
   updatedAt   DateTime @updatedAt
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
+
+  @@unique([id, userId])
 }
 
 model Career {
