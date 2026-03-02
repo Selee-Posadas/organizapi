@@ -9,42 +9,42 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
+  id            String       @id @default(uuid())
+  email         String       @unique
   password_hash String
   name          String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  avatarId      String?  @default("avatar_1")
-  task Task[]
-  category Category[]
-  career Career[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  avatarId      String?      @default("avatar_1")
+  task          Task[]
+  category      Category[]
+  career        Career[]
   enrollments   Enrollment[]
 
   @@map("users")
 }
 
 model Category {
-  id          String   @id @default(uuid())
-  name        String
-  color       String?
-  userId      String
-  user       User     @relation(fields: [userId], references: [id])
-  task       Task[]
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  name      String
+  color     String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  task      Task[]
+  createdAt DateTime @default(now())
 
   @@unique([id, userId])
 }
 
 model Task {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String?
-  status      String   @default("PENDING")
-  userId      String   
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      String    @default("PENDING")
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
 
@@ -52,35 +52,98 @@ model Task {
 }
 
 model Career {
-  id String @id @default(uuid())
-  name String
+  id       String    @id @default(uuid())
+  name     String
   userId   String
   user     User      @relation(fields: [userId], references: [id])
   subjects Subject[]
-
 }
 
-model Subject{
-  id String @id @default(uuid())
-  careerId String
-  career Career @relation(fields: [careerId], references: [id])
-  name String
-  yearLevel Int
-  semester Int
-  enrollments Enrollment[]
+model Subject {
+  id           String               @id @default(uuid())
+  careerId     String
+  career       Career               @relation(fields: [careerId], references: [id])
+  name         String
+  yearLevel    Int
+  semester     Int
+  enrollments  Enrollment[]
+  correlatives SubjectCorrelative[] @relation("SubjectToCorrelative")
+  requiredBy   SubjectCorrelative[] @relation("CorrelativeToSubject")
 }
 
-model Enrollment{
-  id String @id @default(uuid())
-  userId String
-  user User @relation(fields: [userId], references: [id])
-  subjectId String
-  subject Subject @relation(fields: [subjectId], references: [id])
-  status String
+model SubjectCorrelative {
+  id                String  @id @default(uuid())
+  subjectId         String
+  subject           Subject @relation("SubjectToCorrelative", fields: [subjectId], references: [id])
+  requiredSubjectId String
+  requiredSubject   Subject @relation("CorrelativeToSubject", fields: [requiredSubjectId], references: [id])
+  type              String
+
+  @@unique([subjectId, requiredSubjectId])
+}
+
+model Enrollment {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  subjectId    String
+  subject      Subject  @relation(fields: [subjectId], references: [id])
+  status       String
   finalGrade   Float?
   academicYear Int
   createdAt    DateTime @default(now())
 
+  schedules   Schedule[]
+  contacts    Contact[]
+  evaluations AcademicEvaluation[]
+  resources   Resource[]
+
   @@unique([id, userId])
   @@unique([userId, subjectId])
+}
+
+model Schedule {
+  id           String     @id @default(uuid())
+  enrollmentId String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  dayOfWeek    Int
+  startTime    String
+  endTime      String
+  type         String
+  location     String?
+
+  @@map("class_schedules")
+}
+
+model AcademicEvaluation {
+  id           String     @id @default(uuid())
+  enrollmentId String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  type         String
+  date         DateTime
+  topics       String?
+  grade        Float?
+  status       String
+  reflection   String?
+
+  @@map("academic_evaluations")
+}
+
+model Contact {
+  id           String     @id @default(uuid())
+  enrollmentId String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  name         String
+  role         String
+  contactInfo  String?
+}
+
+model Resource {
+  id           String     @id @default(uuid())
+  enrollmentId String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  name         String
+  url          String?
+  type         String
+  isRead       Boolean    @default(false)
 }

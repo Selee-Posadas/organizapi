@@ -1,0 +1,5 @@
+export enum SubjectType {
+  ANNUAL = 'ANNUAL',
+  FIRST_SEMESTER = 'FIRST_SEMESTER',
+  SECOND_SEMESTER = 'SECOND_SEMESTER',
+}
