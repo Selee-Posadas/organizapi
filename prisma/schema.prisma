@@ -80,4 +80,7 @@ model Enrollment{
   finalGrade   Float?
   academicYear Int
   createdAt    DateTime @default(now())
+
+  @@unique([id, userId])
+  @@unique([userId, subjectId])
 }

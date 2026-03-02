@@ -1,9 +1,12 @@
+import { Inject } from '@nestjs/common';
 import { Career } from '../../domain/entities/career.entity';
-import { CareerRepository } from '../../domain/repositories/career.repository';
+import type { CareerRepository } from '../../domain/repositories/career.repository';
 import { CreateCareerDto } from '../../dto/create-career.dto';
 
 export class CreateCareerUseCase {
-  constructor(private readonly careerRepository: CareerRepository) {}
+  constructor(
+    private readonly careerRepository: CareerRepository
+  ) {}
 
   async execute(dto: CreateCareerDto, userId: string): Promise<Career> {
     const existing = await this.careerRepository.findCareerByName(dto.name, userId);

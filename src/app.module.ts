@@ -5,8 +5,8 @@ import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { TaskModule } from './task/task.module';
-import { CategoryController } from './category/infrastructure/controllers/category.controller';
 import { CategoryModule } from './category/category.module';
+import { UniversityModule } from './university/university.module';
 
 @Module({
   imports: [
@@ -17,6 +17,7 @@ import { CategoryModule } from './category/category.module';
     AuthModule,
     TaskModule,
     CategoryModule,
+    UniversityModule,
   ],
   controllers: [AppController],
   providers: [AppService],
