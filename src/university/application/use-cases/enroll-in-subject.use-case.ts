@@ -3,27 +3,58 @@ import { Enrollment } from 'src/university/domain/entities/enrollment.entity';
 import { EnrollmentRepository } from '../../domain/repositories/enrollment.repository';
 import { SubjectRepository } from 'src/university/domain/repositories/subject.repository';
 import { CreateEnrollmentDto } from 'src/university/dto/create-enrollment.dto';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { EnrollmentStatus } from 'src/university/domain/enums/enrollment-status.enum';
 export class EnrollInSubjectUseCase {
-    constructor (
+    constructor(
         private readonly enrollRepository: EnrollmentRepository,
         private readonly subjectRepository: SubjectRepository
-    ){}
+    ) { }
 
-    async execute(dto:CreateEnrollmentDto, userId: string): Promise<Enrollment>{
-        
+    async execute(dto: CreateEnrollmentDto, userId: string): Promise<Enrollment> {
+
         const subject = await this.subjectRepository.findSubjectById(dto.subjectId, userId);
 
-        if(!subject){
-            throw new Error('The subject does not exist or you do not have access');
+        if (!subject) {
+            throw new NotFoundException('The subject does not exist or you do not have access');
         }
         const existingEnrollment = await this.enrollRepository.findEnrollmentByUserAndSubject(userId, dto.subjectId);
-        if(existingEnrollment){
-            throw new Error('You are alredy enrolled to this subject');
+        if (existingEnrollment) {
+            throw new BadRequestException('You are alredy enrolled to this subject');
+        }
+
+        const requirements = await this.subjectRepository.getCorrelatives(dto.subjectId, userId);
+
+        if (requirements && requirements.length > 0) {
+
+            for (const req of requirements) {
+                const priorEnrollment = await this.enrollRepository.findEnrollmentByUserAndSubject(userId, req.requiredSubject.id);
+
+                if (req.type === EnrollmentStatus.APPROVED) {
+                    if (!priorEnrollment || priorEnrollment.status !== EnrollmentStatus.APPROVED) {
+                        throw new BadRequestException(`Prerequisite not met: You need APPROVED status in ${req.requiredSubject.name}`);
+                    }
+                }
+
+                if (req.type === EnrollmentStatus.REGULAR) {
+                    const hasRequiredStatus = priorEnrollment && (
+                        priorEnrollment.status === EnrollmentStatus.REGULAR ||
+                        priorEnrollment.status === EnrollmentStatus.APPROVED ||
+                        priorEnrollment.status === EnrollmentStatus.PROMOTED
+                    );
+
+                    if (!hasRequiredStatus) {
+                        throw new BadRequestException(`Prerequisite not met: You need REGULAR status in ${req.requiredSubject.name}`);
+                    }
+                }
+            }
         }
 
         return await this.enrollRepository.enrollUserInSubject({
             userId,
-            ...dto
+            subjectId: dto.subjectId,
+            academicYear: dto.academicYear,
+            status: EnrollmentStatus.STUDYING,
         });
     }
 }

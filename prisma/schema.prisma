@@ -8,6 +8,7 @@ datasource db {
   provider = "postgresql"
 }
 
+
 model User {
   id            String       @id @default(uuid())
   email         String       @unique
@@ -66,6 +67,7 @@ model Subject {
   name         String
   yearLevel    Int
   semester     Int
+  credits      Int @default(0)
   enrollments  Enrollment[]
   correlatives SubjectCorrelative[] @relation("SubjectToCorrelative")
   requiredBy   SubjectCorrelative[] @relation("CorrelativeToSubject")

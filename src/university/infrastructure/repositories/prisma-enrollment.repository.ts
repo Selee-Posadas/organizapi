@@ -15,6 +15,7 @@ export class PrismaEnrollmentRepository implements EnrollmentRepository {
                 subjectId: enrollment.subjectId,
                 status: enrollment.status,
                 academicYear: enrollment.academicYear,
+                finalGrade: enrollment.finalGrade,
             }
         });
         return UniversityMapper.toDomainEnrollment(created);
@@ -41,6 +42,16 @@ export class PrismaEnrollmentRepository implements EnrollmentRepository {
     async findEnrollmentByUserAndSubject(userId: string, subjectId: string): Promise<Enrollment | null> {
         const enrollment = await this.prisma.enrollment.findFirst({
             where: {userId, subjectId}
+        });
+        return enrollment ? UniversityMapper.toDomainEnrollment(enrollment): null;
+    }
+
+    async findEnrollmentById(id: string, userId: string): Promise<Enrollment | null> {
+        const enrollment = await this.prisma.enrollment.findFirst({
+            where: {
+                id: id,
+                userId: userId
+            }
         });
         return enrollment ? UniversityMapper.toDomainEnrollment(enrollment): null;
     }

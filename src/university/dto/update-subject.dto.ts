@@ -13,7 +13,12 @@ export class UpdateSubjectDto {
 
   @IsOptional()
   @IsInt()
-  @Min(1)
+  @Min(0)
   @Max(2)
   semester?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  credits: number;
 }

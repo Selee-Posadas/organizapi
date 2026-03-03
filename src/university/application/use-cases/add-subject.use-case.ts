@@ -26,6 +26,7 @@ export class AddSubjectUseCase {
       name: dto.name,
       yearLevel: dto.yearLevel,
       semester: dto.semester,
+      credits: dto.credits
     });
   }
 }

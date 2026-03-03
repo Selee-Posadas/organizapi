@@ -5,4 +5,5 @@ export interface EnrollmentRepository {
   updateEnrollment(id: string, userId: string, data: Partial<Enrollment>): Promise<Enrollment>;
   findUserEnrollments(userId: string): Promise<Enrollment[]>;
   findEnrollmentByUserAndSubject(userId: string, subjectId: string): Promise<Enrollment | null>;
+  findEnrollmentById(id: string, userId: string): Promise<Enrollment | null>;
 }

@@ -15,6 +15,7 @@ export class PrismaSubjectRepository implements SubjectRepository {
                 name: subject.name!,
                 yearLevel: subject.yearLevel!,
                 semester: subject.semester!,
+                credits: subject.credits ?? 0,
             },
         });
         return UniversityMapper.toDomainSubject(created);
@@ -57,5 +58,26 @@ export class PrismaSubjectRepository implements SubjectRepository {
             data: { ...data }
         });
         return UniversityMapper.toDomainSubject(updated);
+    }
+
+    async getCorrelatives(subjectId: string, userId: string) {
+        const result = await this.prisma.subjectCorrelative.findMany({
+            where: {
+                subjectId: subjectId,
+                subject: {
+                    career: {
+                        userId: userId
+                    }
+                }
+            },
+            include: {
+                requiredSubject: true
+            }
+        });
+
+        return result.map(res => ({
+            requiredSubject: UniversityMapper.toDomainSubject(res.requiredSubject),
+            type: res.type
+        }));
     }
 }
