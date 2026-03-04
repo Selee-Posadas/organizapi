@@ -9,6 +9,7 @@ import { ScheduleType } from 'src/university/domain/enums/schedule-type.enum';
 import { Contact } from 'src/university/domain/entities/contact.entity';
 import { ContactWithSubjectDto } from 'src/university/dto/contact/contact-with-subject.dto';
 import { StudyType } from 'src/university/domain/enums/study-type.enum';
+import { EnrollmentWithDetailsDto } from 'src/university/dto/enrollment/enrollment-with-details.dto';
 
 export class UniversityMapper {
 
@@ -46,6 +47,17 @@ export class UniversityMapper {
       raw.createdAt
     );
   }
+
+  static toResponseEnrollmentDto(raw: any): EnrollmentWithDetailsDto {
+    return {
+        id: raw.id,
+        status: raw.status as EnrollmentStatus,
+        academicYear: raw.academicYear,
+        finalGrade: raw.finalGrade,
+        subjectName: raw.subject?.name || 'N/A',
+        careerName: raw.subject?.career?.name || 'N/A'
+    };
+}
 
   static toDomainEvaluation(raw: any): AcademicEvaluation {
     return new AcademicEvaluation(

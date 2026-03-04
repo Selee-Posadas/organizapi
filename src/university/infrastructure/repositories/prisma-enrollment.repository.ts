@@ -3,6 +3,8 @@ import { PrismaService } from "src/infrastructure/prisma/prisma.service";
 import { Enrollment } from "src/university/domain/entities/enrollment.entity";
 import { EnrollmentRepository } from "src/university/domain/repositories/enrollment.repository";
 import { UniversityMapper } from "../mappers/university.mapper";
+import { EnrollmentStatus } from "src/university/domain/enums/enrollment-status.enum";
+import { EnrollmentWithDetailsDto } from "src/university/dto/enrollment/enrollment-with-details.dto";
 
 @Injectable()
 export class PrismaEnrollmentRepository implements EnrollmentRepository {
@@ -23,36 +25,71 @@ export class PrismaEnrollmentRepository implements EnrollmentRepository {
 
     async updateEnrollment(id: string, userId: string, data: Partial<Enrollment>): Promise<Enrollment> {
         const updated = await this.prisma.enrollment.update({
-            where: { id, userId },
+            where: { id_userId: { id, userId } },
             data: {
                 status: data.status,
                 finalGrade: data.finalGrade,
+                academicYear: data.academicYear,
             }
         });
         return UniversityMapper.toDomainEnrollment(updated);
     }
 
-    async findUserEnrollments(userId: string): Promise<Enrollment[]> {
+    async deleteEnrollment(id: string, userId: string): Promise<void> {
+        await this.prisma.enrollment.delete({
+            where: { id_userId: { id, userId } },
+        });
+    }
+
+    async findEnrollmentById(id: string, userId: string): Promise<Enrollment | null> {
+        const enrollment = await this.prisma.enrollment.findUnique({
+            where: { id_userId: { id, userId } },
+        });
+        return enrollment ? UniversityMapper.toDomainEnrollment(enrollment) : null;
+    }
+
+    async findAllEnrollments(userId: string): Promise<Enrollment[]> {
         const enrollments = await this.prisma.enrollment.findMany({
             where: { userId }
         });
         return enrollments.map(UniversityMapper.toDomainEnrollment);
     }
 
-    async findEnrollmentByUserAndSubject(userId: string, subjectId: string): Promise<Enrollment | null> {
-        const enrollment = await this.prisma.enrollment.findFirst({
-            where: {userId, subjectId}
+    async findEnrollmentBySubject(subjectId: string, userId: string): Promise<Enrollment | null> {
+        const enrollment = await this.prisma.enrollment.findUnique({
+            where: { userId_subjectId: { userId, subjectId } }
         });
-        return enrollment ? UniversityMapper.toDomainEnrollment(enrollment): null;
+        return enrollment ? UniversityMapper.toDomainEnrollment(enrollment) : null;
     }
 
-    async findEnrollmentById(id: string, userId: string): Promise<Enrollment | null> {
-        const enrollment = await this.prisma.enrollment.findFirst({
-            where: {
-                id: id,
-                userId: userId
-            }
+    async findEnrollmentByStatus(status: EnrollmentStatus, userId: string): Promise<Enrollment[]> {
+        const enrollments = await this.prisma.enrollment.findMany({
+            where: { userId, status },
         });
-        return enrollment ? UniversityMapper.toDomainEnrollment(enrollment): null;
+        return enrollments.map(UniversityMapper.toDomainEnrollment);
     }
+
+    async findEnrollmentByYear(academicYear: number, userId: string): Promise<Enrollment[]> {
+        const enrollments = await this.prisma.enrollment.findMany({
+            where: { userId, academicYear },
+        });
+        return enrollments.map(UniversityMapper.toDomainEnrollment);
+    }
+
+    async findAllEnrollmentsWithDetails(userId: string): Promise<EnrollmentWithDetailsDto[]> {
+        const enrollments = await this.prisma.enrollment.findMany({
+            where: { userId },
+            include: {
+                subject: {
+                    include: {
+                        career: true,
+                    },
+                },
+            },
+        });
+
+        return enrollments.map(enroll => UniversityMapper.toResponseEnrollmentDto(enroll));
+    }
+
+
 }
