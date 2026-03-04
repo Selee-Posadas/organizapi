@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type { ContactRepository } from "src/university/domain/repositories/contact.repository";
 import { UpdateContactDto } from "src/university/dto/contact/update-contact.dto";
 
 @Injectable()
 export class UpdateContactUseCase {
     constructor(
+        @Inject('ContactRepository')
         private readonly contactRepo: ContactRepository,
     ) { }
 

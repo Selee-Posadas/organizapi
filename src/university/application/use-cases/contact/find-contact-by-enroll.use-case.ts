@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { ContactRepository } from "src/university/domain/repositories/contact.repository";
 import { Contact } from "src/university/domain/entities/contact.entity";
 
 @Injectable()
 export class FindContactsByEnrollmentUseCase {
     constructor(
+        @Inject('ContactRepository')
         private readonly contactRepo: ContactRepository,
     ) { }
 

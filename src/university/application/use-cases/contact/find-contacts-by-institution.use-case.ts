@@ -1,9 +1,12 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { ContactRepository } from "src/university/domain/repositories/contact.repository";
 
 @Injectable()
 export class FindContactsByInstitutionUseCase {
-    constructor(private readonly contactRepo: ContactRepository) { }
+    constructor(
+        @Inject('ContactRepository')
+        private readonly contactRepo: ContactRepository
+    ) { }
 
     async execute(institution: string, userId: string) {
         if (!institution || institution.length < 3) return [];
