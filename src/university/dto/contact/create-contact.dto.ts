@@ -1,4 +1,4 @@
-import { IsString, IsUUID, IsEnum, IsOptional, IsEmail } from 'class-validator';
+import { IsString, IsUUID, IsEnum, IsOptional, IsEmail, MinLength } from 'class-validator';
 import { ContactRule } from 'src/university/domain/enums/contact-role.enum';
 
 export class CreateContactDto {
@@ -6,6 +6,7 @@ export class CreateContactDto {
   enrollmentId: string;
 
   @IsString()
+  @MinLength(3)
   name: string;
 
   @IsEnum(ContactRule)

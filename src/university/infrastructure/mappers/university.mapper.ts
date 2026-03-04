@@ -8,6 +8,7 @@ import { Schedule } from 'src/university/domain/entities/schedule.entity';
 import { ScheduleType } from 'src/university/domain/enums/schedule-type.enum';
 import { Contact } from 'src/university/domain/entities/contact.entity';
 import { ContactWithSubjectDto } from 'src/university/dto/contact/contact-with-subject.dto';
+import { StudyType } from 'src/university/domain/enums/study-type.enum';
 
 export class UniversityMapper {
 
@@ -17,7 +18,7 @@ export class UniversityMapper {
       raw.name,
       raw.userId,
       raw.institution,
-      raw.type,
+      raw.type as StudyType,
       raw.whatsappGroup,
       raw.facultyContactInfo
     );
