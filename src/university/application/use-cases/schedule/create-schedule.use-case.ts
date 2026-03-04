@@ -1,7 +1,7 @@
 import { ForbiddenException, NotFoundException } from "@nestjs/common";
-import { EnrollmentRepository } from "../../domain/repositories/enrollment.repository";
-import { ScheduleRepository } from "../../domain/repositories/schedule.repository";
-import { CreateScheduleDto } from "../../dto/create-schedule.dto";
+import { EnrollmentRepository } from "src/university/domain/repositories/enrollment.repository";
+import { ScheduleRepository } from "src/university/domain/repositories/schedule.repository";
+import { CreateScheduleDto } from "src/university/dto/schedule/create-schedule.dto";
 
 export class CreateScheduleUseCase {
     constructor(

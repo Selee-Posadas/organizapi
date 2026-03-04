@@ -1,10 +1,10 @@
 import { Body, Controller, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/auth/infrastructure/guards/auth.guard";
 import { GetUser } from "src/auth/infrastructure/decorators/get-user.decorator";
-import { EnrollInSubjectUseCase } from "src/university/application/use-cases/enroll-in-subject.use-case";
-import { CreateEnrollmentDto } from "src/university/dto/create-enrollment.dto";
-import { UpdateEnrollmentDto } from "src/university/dto/update-enrollment.dto";
-import { UpdateEnrollmentUseCase } from '../../../application/use-cases/update-enrollment.use-case';
+import { EnrollInSubjectUseCase } from "src/university/application/use-cases/enrollment/enroll-in-subject.use-case";
+import { UpdateEnrollmentUseCase } from "src/university/application/use-cases/enrollment/update-enrollment.use-case";
+import { CreateEnrollmentDto } from "src/university/dto/enrollment/create-enrollment.dto";
+import { UpdateEnrollmentDto } from "src/university/dto/enrollment/update-enrollment.dto";
 
 @Controller('enroll')
 @UseGuards(AuthGuard)

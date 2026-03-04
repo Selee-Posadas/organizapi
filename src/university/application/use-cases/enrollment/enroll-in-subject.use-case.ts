@@ -1,10 +1,10 @@
 
 import { Enrollment } from 'src/university/domain/entities/enrollment.entity';
-import { EnrollmentRepository } from '../../domain/repositories/enrollment.repository';
 import { SubjectRepository } from 'src/university/domain/repositories/subject.repository';
-import { CreateEnrollmentDto } from 'src/university/dto/create-enrollment.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { EnrollmentStatus } from 'src/university/domain/enums/enrollment-status.enum';
+import { EnrollmentRepository } from 'src/university/domain/repositories/enrollment.repository';
+import { CreateEnrollmentDto } from 'src/university/dto/enrollment/create-enrollment.dto';
 export class EnrollInSubjectUseCase {
     constructor(
         private readonly enrollRepository: EnrollmentRepository,

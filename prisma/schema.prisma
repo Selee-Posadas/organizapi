@@ -8,7 +8,12 @@ datasource db {
   provider = "postgresql"
 }
 
-
+enum StudyType {
+  CAREER
+  COURSE
+  CERTIFICATION
+  OTHER
+}
 model User {
   id            String       @id @default(uuid())
   email         String       @unique
@@ -55,6 +60,10 @@ model Task {
 model Career {
   id       String    @id @default(uuid())
   name     String
+  institution        String?
+  type               StudyType @default(CAREER)
+  whatsappGroup      String?
+  facultyContactInfo String?
   userId   String
   user     User      @relation(fields: [userId], references: [id])
   subjects Subject[]
@@ -137,7 +146,10 @@ model Contact {
   enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
   name         String
   role         String
-  contactInfo  String?
+  email        String?    
+  phone        String?    
+  whatsappLink String?
+  notes        String?
 }
 
 model Resource {
@@ -149,3 +161,4 @@ model Resource {
   type         String
   isRead       Boolean    @default(false)
 }
+

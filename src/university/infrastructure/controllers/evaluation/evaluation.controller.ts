@@ -1,10 +1,10 @@
 import { Body, Controller, Post, Patch, Param, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/auth/infrastructure/guards/auth.guard";
 import { GetUser } from "src/auth/infrastructure/decorators/get-user.decorator";
-import { CreateEvaluationUseCase } from "src/university/application/use-cases/create-evaluation.use-case";
-import { UpdateEvaluationUseCase } from "src/university/application/use-cases/update-evaluation.use-case";
-import { CreateEvaluationDto } from "src/university/dto/create-evaluation.dto";
-import { UpdateEvaluationDto } from "src/university/dto/update-evaluation.dto";
+import { UpdateEvaluationDto } from "src/university/dto/evaluation/update-evaluation.dto";
+import { CreateEvaluationUseCase } from "src/university/application/use-cases/evaluation/create-evaluation.use-case";
+import { UpdateEvaluationUseCase } from "src/university/application/use-cases/evaluation/update-evaluation.use-case";
+import { CreateEvaluationDto } from "src/university/dto/evaluation/create-evaluation.dto";
 
 @Controller('evaluation')
 @UseGuards(AuthGuard)

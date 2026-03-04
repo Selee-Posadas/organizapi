@@ -6,13 +6,20 @@ import { AcademicEvaluation } from 'src/university/domain/entities/academic-eval
 import { EvaluationType } from 'src/university/domain/enums/evaluation-type.enum';
 import { Schedule } from 'src/university/domain/entities/schedule.entity';
 import { ScheduleType } from 'src/university/domain/enums/schedule-type.enum';
+import { Contact } from 'src/university/domain/entities/contact.entity';
+import { ContactWithSubjectDto } from 'src/university/dto/contact/contact-with-subject.dto';
 
 export class UniversityMapper {
 
   static toDomainCareer(raw: any): Career {
     return new Career(
       raw.id,
-      raw.name
+      raw.name,
+      raw.userId,
+      raw.institution,
+      raw.type,
+      raw.whatsappGroup,
+      raw.facultyContactInfo
     );
   }
 
@@ -62,6 +69,32 @@ export class UniversityMapper {
       raw.type as ScheduleType,
       raw.location
     );
+  }
+
+  static toDomainContact(raw: any): Contact {
+    return new Contact(
+      raw.id,
+      raw.enrollmentId,
+      raw.name,
+      raw.role,
+      raw.email,
+      raw.phone,
+      raw.whatsappLink,
+      raw.notes
+    );
+  }
+
+  static toResponseContactDto(raw: any): ContactWithSubjectDto {
+    return {
+      id: raw.id,
+      name: raw.name,
+      role: raw.role,
+      email: raw.email,
+      phone: raw.phone,
+      whatsappLink: raw.whatsappLink,
+      notes: raw.notes,
+      subjectName: raw.enrollment?.subject?.name || 'Sin materia'
+    };
   }
 
 }

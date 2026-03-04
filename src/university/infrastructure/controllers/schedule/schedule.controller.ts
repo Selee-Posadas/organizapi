@@ -2,10 +2,10 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { GetUser } from "src/auth/infrastructure/decorators/get-user.decorator";
 import { AuthGuard } from "src/auth/infrastructure/guards/auth.guard";
-import { CreateScheduleUseCase } from "src/university/application/use-cases/create-schedule.use-case";
-import { DeleteScheduleUseCase } from "src/university/application/use-cases/delete-schedule.use-case";
-import { GetTodaySchedulesUseCase } from "src/university/application/use-cases/get-today-schedules.use-case";
-import { CreateScheduleDto } from "src/university/dto/create-schedule.dto";
+import { CreateScheduleUseCase } from "src/university/application/use-cases/schedule/create-schedule.use-case";
+import { DeleteScheduleUseCase } from "src/university/application/use-cases/schedule/delete-schedule.use-case";
+import { GetTodaySchedulesUseCase } from "src/university/application/use-cases/schedule/get-today-schedules.use-case";
+import { CreateScheduleDto } from "src/university/dto/schedule/create-schedule.dto";
 
 @Controller('schedule')
 @UseGuards(AuthGuard)

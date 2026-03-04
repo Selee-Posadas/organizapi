@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
-import { Career } from '../../domain/entities/career.entity';
-import type { CareerRepository } from '../../domain/repositories/career.repository';
-import { CreateCareerDto } from '../../dto/create-career.dto';
+import { Career } from 'src/university/domain/entities/career.entity';
+import { CareerRepository } from 'src/university/domain/repositories/career.repository';
+import { CreateCareerDto } from 'src/university/dto/career/create-career.dto';
 
 export class CreateCareerUseCase {
   constructor(

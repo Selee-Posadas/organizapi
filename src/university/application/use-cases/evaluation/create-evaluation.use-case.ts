@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import type { EvaluationRepository } from '../../domain/repositories/evaluation.repository';
-import type { EnrollmentRepository } from '../../domain/repositories/enrollment.repository';
-import { AcademicEvaluation } from '../../domain/entities/academic-evaluation.entity';
-import { CreateEvaluationDto } from '../../dto/create-evaluation.dto';
+import { AcademicEvaluation } from 'src/university/domain/entities/academic-evaluation.entity';
+import type { EnrollmentRepository } from 'src/university/domain/repositories/enrollment.repository';
+import type { EvaluationRepository } from 'src/university/domain/repositories/evaluation.repository';
+import { CreateEvaluationDto } from 'src/university/dto/evaluation/create-evaluation.dto';
 
 @Injectable()
 export class CreateEvaluationUseCase {

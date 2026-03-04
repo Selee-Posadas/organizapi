@@ -1,0 +1,6 @@
+export enum StudyType {
+  CAREER = 'CAREER',
+  COURSE = 'COURSE',
+  CERTIFICATION = 'CERTIFICATION',
+  OTHER = 'OTHER',
+}

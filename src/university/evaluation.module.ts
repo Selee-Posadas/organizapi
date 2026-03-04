@@ -4,10 +4,10 @@ import { PrismaModule } from "src/infrastructure/prisma/prisma.module";
 import { EnrollmentModule } from "./enroll.module";
 import { EvaluationController } from "./infrastructure/controllers/evaluation/evaluation.controller";
 import { PrismaEvaluationRepository } from "./infrastructure/repositories/prisma-evaluation.repository";
-import { CreateEvaluationUseCase } from "./application/use-cases/create-evaluation.use-case";
-import { UpdateEvaluationUseCase } from "./application/use-cases/update-evaluation.use-case";
 import { EvaluationRepository } from "./domain/repositories/evaluation.repository";
 import { EnrollmentRepository } from "./domain/repositories/enrollment.repository";
+import { CreateEvaluationUseCase } from "./application/use-cases/evaluation/create-evaluation.use-case";
+import { UpdateEvaluationUseCase } from "./application/use-cases/evaluation/update-evaluation.use-case";
 
 @Module({
     imports: [PrismaModule, AuthModule, EnrollmentModule],

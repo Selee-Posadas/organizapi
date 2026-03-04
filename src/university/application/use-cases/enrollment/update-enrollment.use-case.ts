@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Enrollment } from 'src/university/domain/entities/enrollment.entity';
-import { UpdateEnrollmentDto } from '../../dto/update-enrollment.dto';
-import type { EnrollmentRepository } from '../../domain/repositories/enrollment.repository';
+import type { EnrollmentRepository } from 'src/university/domain/repositories/enrollment.repository';
+import { UpdateEnrollmentDto } from 'src/university/dto/enrollment/update-enrollment.dto';
+
 
 
 @Injectable()

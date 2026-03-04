@@ -13,6 +13,10 @@ export class PrismaCareerRepository implements CareerRepository {
             data: {
                 name: career.name!,
                 userId: career.userId,
+                institution: career.institution,
+                type: career.type,
+                whatsappGroup: career.whatsappGroup,
+                facultyContactInfo: career.facultyContactInfo
             },
         });
         return UniversityMapper.toDomainCareer(created);
@@ -40,7 +44,7 @@ export class PrismaCareerRepository implements CareerRepository {
     async updateCareer(id: string, userId: string, data: Partial<Career>): Promise<Career> {
         const updated = await this.prisma.career.update({
             where: { id, userId },
-            data: { name: data.name },
+            data: { ...data },
         });
         return UniversityMapper.toDomainCareer(updated);
     }

@@ -1,5 +1,5 @@
 import { IsString, IsEnum, IsUUID, IsDateString, IsOptional, IsNumber, Min, Max } from 'class-validator';
-import { EvaluationType } from '../domain/enums/evaluation-type.enum';
+import { EvaluationType } from 'src/university/domain/enums/evaluation-type.enum';
 
 export class CreateEvaluationDto {
   @IsUUID()

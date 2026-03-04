@@ -1,5 +1,5 @@
 import { IsString, IsInt, Min, Max, IsEnum, IsUUID, Matches, IsOptional } from 'class-validator';
-import { ScheduleType } from '../domain/enums/schedule-type.enum';
+import { ScheduleType } from '../../domain/enums/schedule-type.enum';
 
 export class CreateScheduleDto {
   @IsUUID()

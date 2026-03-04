@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { GetUser } from "src/auth/infrastructure/decorators/get-user.decorator";
 import { AuthGuard } from "src/auth/infrastructure/guards/auth.guard";
-import { AddSubjectUseCase } from "src/university/application/use-cases/add-subject.use-case";
-import { CreateSubjectDto } from "src/university/dto/create-subject.dto";
+import { AddSubjectUseCase } from "src/university/application/use-cases/subject/add-subject.use-case";
+import { CreateSubjectDto } from "src/university/dto/subject/create-subject.dto";
 
 @Controller('subject')
 @UseGuards(AuthGuard)

@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/auth/infrastructure/guards/auth.guard";
-import { CreateCareerUseCase } from '../../../application/use-cases/create-career.use-case';
 import { GetUser } from "src/auth/infrastructure/decorators/get-user.decorator";
-import { CreateCareerDto } from "src/university/dto/create-career.dto";
+import { CreateCareerUseCase } from "src/university/application/use-cases/career/create-career.use-case";
+import { CreateCareerDto } from "src/university/dto/career/create-career.dto";
 
 @Controller('career')
 @UseGuards(AuthGuard)

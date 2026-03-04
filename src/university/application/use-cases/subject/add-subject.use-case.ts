@@ -1,7 +1,7 @@
-import { Subject } from '../../domain/entities/subject.entity';
-import { SubjectRepository } from '../../domain/repositories/subject.repository';
-import { CareerRepository } from '../../domain/repositories/career.repository';
-import { CreateSubjectDto } from '../../dto/create-subject.dto';
+import { Subject } from "src/university/domain/entities/subject.entity";
+import { CareerRepository } from "src/university/domain/repositories/career.repository";
+import { SubjectRepository } from "src/university/domain/repositories/subject.repository";
+import { CreateSubjectDto } from "src/university/dto/subject/create-subject.dto";
 
 export class AddSubjectUseCase {
   constructor(

@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { AuthModule } from "src/auth/auth.module";
 import { PrismaModule } from "src/infrastructure/prisma/prisma.module";
-import { AddSubjectUseCase } from "./application/use-cases/add-subject.use-case";
 import { CareerModule } from "./career.module";
 import { CareerRepository } from "./domain/repositories/career.repository";
 import { SubjectRepository } from "./domain/repositories/subject.repository";
 import { SubjectController } from "./infrastructure/controllers/subject/subject.controller";
 import { PrismaSubjectRepository } from "./infrastructure/repositories/prisma-subject.repository";
+import { AddSubjectUseCase } from "./application/use-cases/subject/add-subject.use-case";
 
 @Module({
   imports: [PrismaModule, AuthModule, CareerModule],

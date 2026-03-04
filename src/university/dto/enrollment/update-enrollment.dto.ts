@@ -1,5 +1,5 @@
 import { IsInt, IsEnum, Min, Max, IsOptional } from 'class-validator';
-import { EnrollmentStatus } from '../domain/enums/enrollment-status.enum';
+import { EnrollmentStatus } from 'src/university/domain/enums/enrollment-status.enum';
 
 export class UpdateEnrollmentDto {
   @IsOptional()
