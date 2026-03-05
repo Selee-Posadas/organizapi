@@ -1,4 +1,5 @@
-import { IsString, IsInt, Min, Max, IsUUID, MinLength, IsOptional } from 'class-validator';
+import { IsString, IsInt, Min, IsUUID, MinLength, IsOptional, IsEnum } from 'class-validator';
+import { SubjectType } from 'src/university/domain/enums/subject-type.enum';
 
 export class CreateSubjectDto {
   @IsUUID()
@@ -12,10 +13,8 @@ export class CreateSubjectDto {
   @Min(1)
   yearLevel: number;
 
-  @IsInt()
-  @Min(0)
-  @Max(2)
-  semester: number;
+  @IsEnum(SubjectType)
+  semester: SubjectType;
 
   @IsOptional()
   @IsInt()

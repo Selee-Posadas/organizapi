@@ -1,5 +1,5 @@
 import { Career } from '../../domain/entities/career.entity';
-import { Subject } from '../../domain/entities/subject.entity';
+import { Subject, SubjectCorrelativeInfo } from '../../domain/entities/subject.entity';
 import { Enrollment } from '../../domain/entities/enrollment.entity';
 import { EnrollmentStatus } from '../../domain/enums/enrollment-status.enum';
 import { AcademicEvaluation } from 'src/university/domain/entities/academic-evaluation.entity';
@@ -12,6 +12,8 @@ import { StudyType } from 'src/university/domain/enums/study-type.enum';
 import { EnrollmentWithDetailsDto } from 'src/university/dto/enrollment/enrollment-with-details.dto';
 import { ScheduleWithDetailsDto } from 'src/university/dto/schedule/schedule-with-details.dto';
 import { EvaluationWithDetailsDto } from 'src/university/dto/evaluation/evaluation-with-details.dto';
+import { SubjectType } from 'src/university/domain/enums/subject-type.enum';
+import { SubjectCorrelativeDetailDto, SubjectWithDetailsDto } from 'src/university/dto/subject/subject-with-details.dto';
 
 export class UniversityMapper {
 
@@ -28,15 +30,41 @@ export class UniversityMapper {
   }
 
   static toDomainSubject(raw: any): Subject {
+    const correlatives: SubjectCorrelativeInfo[] = raw.correlatives?.map((c: any) => ({
+      requiredSubjectId: c.requiredSubjectId,
+      name: c.requiredSubject?.name,
+      type: c.type as EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED,
+    })) || [];
     return new Subject(
       raw.id,
       raw.careerId,
       raw.name,
       raw.yearLevel,
-      raw.semester,
-      raw.credits
+      raw.semester as SubjectType,
+      raw.credits,
+      correlatives
     );
   }
+
+  static toResponseSubjectDto(raw: any): SubjectWithDetailsDto {
+    const correlatives: SubjectCorrelativeDetailDto[] = raw.correlatives?.map((c: any) => ({
+      requiredSubjectId: c.requiredSubjectId,
+      name: c.requiredSubject?.name || 'Unknown Subject',
+      type: c.type as EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED,
+    })) || [];
+
+    return {
+      id: raw.id,
+      careerId: raw.careerId,
+      name: raw.name,
+      yearLevel: raw.yearLevel,
+      semester: raw.semester as SubjectType,
+      credits: raw.credits,
+      correlatives
+    };
+  }
+
+
 
   static toDomainEnrollment(raw: any): Enrollment {
     return new Enrollment(
@@ -52,14 +80,14 @@ export class UniversityMapper {
 
   static toResponseEnrollmentDto(raw: any): EnrollmentWithDetailsDto {
     return {
-        id: raw.id,
-        status: raw.status as EnrollmentStatus,
-        academicYear: raw.academicYear,
-        finalGrade: raw.finalGrade,
-        subjectName: raw.subject?.name || 'Unknown Subject',
-        careerName: raw.subject?.career?.name || 'Unknown Career'
+      id: raw.id,
+      status: raw.status as EnrollmentStatus,
+      academicYear: raw.academicYear,
+      finalGrade: raw.finalGrade,
+      subjectName: raw.subject?.name || 'Unknown Subject',
+      careerName: raw.subject?.career?.name || 'Unknown Career'
     };
-}
+  }
 
   static toDomainEvaluation(raw: any): AcademicEvaluation {
     return new AcademicEvaluation(
@@ -75,19 +103,19 @@ export class UniversityMapper {
   }
 
   static toResponseEvaluationDto(raw: any): EvaluationWithDetailsDto {
-  return {
-    id: raw.id,
-    enrollmentId: raw.enrollmentId,
-    type: raw.type as EvaluationType,
-    date: raw.date,
-    status: raw.status,
-    topics: raw.topics,
-    grade: raw.grade,
-    reflection: raw.reflection,
-    subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
-    careerName: raw.enrollment?.subject?.career?.name || 'Unknown Career',
-  };
-}
+    return {
+      id: raw.id,
+      enrollmentId: raw.enrollmentId,
+      type: raw.type as EvaluationType,
+      date: raw.date,
+      status: raw.status,
+      topics: raw.topics,
+      grade: raw.grade,
+      reflection: raw.reflection,
+      subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
+      careerName: raw.enrollment?.subject?.career?.name || 'Unknown Career',
+    };
+  }
 
   static toDomainSchedule(raw: any): Schedule {
     return new Schedule(
@@ -102,18 +130,18 @@ export class UniversityMapper {
   }
 
   static toResponseScheduleDto(raw: any): ScheduleWithDetailsDto {
-  return {
-    id: raw.id,
-    enrollmentId: raw.enrollmentId,
-    dayOfWeek: raw.dayOfWeek,
-    startTime: raw.startTime,
-    endTime: raw.endTime,
-    type: raw.type as ScheduleType,
-    location: raw.location,
-    subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
-    careerName: raw.enrollment?.subject?.career?.name || 'Unknown Career',
-  };
-}
+    return {
+      id: raw.id,
+      enrollmentId: raw.enrollmentId,
+      dayOfWeek: raw.dayOfWeek,
+      startTime: raw.startTime,
+      endTime: raw.endTime,
+      type: raw.type as ScheduleType,
+      location: raw.location,
+      subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
+      careerName: raw.enrollment?.subject?.career?.name || 'Unknown Career',
+    };
+  }
 
   static toDomainContact(raw: any): Contact {
     return new Contact(
