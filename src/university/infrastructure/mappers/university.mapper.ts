@@ -10,6 +10,7 @@ import { Contact } from 'src/university/domain/entities/contact.entity';
 import { ContactWithSubjectDto } from 'src/university/dto/contact/contact-with-subject.dto';
 import { StudyType } from 'src/university/domain/enums/study-type.enum';
 import { EnrollmentWithDetailsDto } from 'src/university/dto/enrollment/enrollment-with-details.dto';
+import { ScheduleWithDetailsDto } from 'src/university/dto/schedule/schedule-with-details.dto';
 
 export class UniversityMapper {
 
@@ -54,8 +55,8 @@ export class UniversityMapper {
         status: raw.status as EnrollmentStatus,
         academicYear: raw.academicYear,
         finalGrade: raw.finalGrade,
-        subjectName: raw.subject?.name || 'N/A',
-        careerName: raw.subject?.career?.name || 'N/A'
+        subjectName: raw.subject?.name || 'Unknown Subject',
+        careerName: raw.subject?.career?.name || 'Unknown Career'
     };
 }
 
@@ -84,6 +85,20 @@ export class UniversityMapper {
     );
   }
 
+  static toResponseScheduleDto(raw: any): ScheduleWithDetailsDto {
+  return {
+    id: raw.id,
+    enrollmentId: raw.enrollmentId,
+    dayOfWeek: raw.dayOfWeek,
+    startTime: raw.startTime,
+    endTime: raw.endTime,
+    type: raw.type as ScheduleType,
+    location: raw.location,
+    subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
+    careerName: raw.enrollment?.subject?.career?.name || 'Unknown Career',
+  };
+}
+
   static toDomainContact(raw: any): Contact {
     return new Contact(
       raw.id,
@@ -106,7 +121,7 @@ export class UniversityMapper {
       phone: raw.phone,
       whatsappLink: raw.whatsappLink,
       notes: raw.notes,
-      subjectName: raw.enrollment?.subject?.name || 'Sin materia'
+      subjectName: raw.enrollment?.subject?.name || 'Unknown Subject'
     };
   }
 
