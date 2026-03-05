@@ -11,6 +11,7 @@ import { ContactWithSubjectDto } from 'src/university/dto/contact/contact-with-s
 import { StudyType } from 'src/university/domain/enums/study-type.enum';
 import { EnrollmentWithDetailsDto } from 'src/university/dto/enrollment/enrollment-with-details.dto';
 import { ScheduleWithDetailsDto } from 'src/university/dto/schedule/schedule-with-details.dto';
+import { EvaluationWithDetailsDto } from 'src/university/dto/evaluation/evaluation-with-details.dto';
 
 export class UniversityMapper {
 
@@ -72,6 +73,21 @@ export class UniversityMapper {
       raw.reflection
     );
   }
+
+  static toResponseEvaluationDto(raw: any): EvaluationWithDetailsDto {
+  return {
+    id: raw.id,
+    enrollmentId: raw.enrollmentId,
+    type: raw.type as EvaluationType,
+    date: raw.date,
+    status: raw.status,
+    topics: raw.topics,
+    grade: raw.grade,
+    reflection: raw.reflection,
+    subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
+    careerName: raw.enrollment?.subject?.career?.name || 'Unknown Career',
+  };
+}
 
   static toDomainSchedule(raw: any): Schedule {
     return new Schedule(
