@@ -14,6 +14,9 @@ import { ScheduleWithDetailsDto } from 'src/university/dto/schedule/schedule-wit
 import { EvaluationWithDetailsDto } from 'src/university/dto/evaluation/evaluation-with-details.dto';
 import { SubjectType } from 'src/university/domain/enums/subject-type.enum';
 import { SubjectCorrelativeDetailDto, SubjectWithDetailsDto } from 'src/university/dto/subject/subject-with-details.dto';
+import { Resource } from 'src/university/domain/entities/resource.entity';
+import { ResourceType } from 'src/university/domain/enums/resouce-type.enum';
+import { ResourceWithDetailsDto } from 'src/university/dto/resource/resource-with-details.dto';
 
 export class UniversityMapper {
 
@@ -166,6 +169,29 @@ export class UniversityMapper {
       whatsappLink: raw.whatsappLink,
       notes: raw.notes,
       subjectName: raw.enrollment?.subject?.name || 'Unknown Subject'
+    };
+  }
+
+  static toDomainResource(raw: any): Resource {
+    return new Resource(
+      raw.id,
+      raw.enrollmentId,
+      raw.name,
+      raw.type as ResourceType,
+      raw.url,
+      raw.isRead
+    );
+  }
+
+  static toResourceWithDetails(raw: any): ResourceWithDetailsDto {
+    return {
+      id: raw.id,
+      name: raw.name,
+      url: raw.url,
+      type: raw.type,
+      isRead: raw.isRead,
+      subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
+      enrollmentId: raw.enrollmentId
     };
   }
 
