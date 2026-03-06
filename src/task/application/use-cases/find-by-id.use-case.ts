@@ -1,23 +1,24 @@
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { Task } from "src/task/domain/entities/task.entity";
-import { TaskRepository } from "src/task/domain/repositories/task.repository";
+import type { TaskRepository } from "src/task/domain/repositories/task.repository";
 
-export class FindByIdUseCase {
+@Injectable()
+export class FindTaskByIdUseCase {
     constructor(
-        private readonly taskRepository: TaskRepository
-    ){}
+        @Inject('TaskRepository')
+        private readonly taskRepo: TaskRepository
+    ) { }
 
-    async execute(taskId: string, userId: string): Promise<Task> {
+    async execute(id: string, userId: string): Promise<Task> {
 
-        const task = await this.taskRepository.findById(taskId, userId);
-        
-        if(!task){
-            throw new Error('Task not found');
+        if (!id) {
+            throw new BadRequestException('Task ID is required');
         }
-
-        if(task.userId !== userId){
-            throw new Error('You do not have permission to access this task');
+        if (!userId) {
+            throw new BadRequestException('User authentication is required');
         }
-
+        const task = await this.taskRepo.findTaskById(id, userId);
+        if (!task) throw new NotFoundException('Task not found');
         return task;
     }
 }

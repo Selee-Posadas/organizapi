@@ -44,16 +44,28 @@ model Category {
 }
 
 model Task {
-  id          String    @id @default(uuid())
-  title       String
-  description String?
-  status      String    @default("PENDING")
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
+  id              String    @id @default(uuid())
+  title           String
+  description     String?
+  status          String    @default("PENDING")
+  priority        String    @default("MEDIUM")
+  energyRequired  String    @default("MEDIUM")
+  
+  dueDate         DateTime?
+  startTime       String?   
+  endTime         String?
+  
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  
+  goalId          String?
+  // goal         Goal?     @relation(fields: [goalId], references: [id]) // Habilitar cuando cree el modelo Goal
+
+  categoryId      String?
+  category        Category? @relation(fields: [categoryId], references: [id])
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@unique([id, userId])
 }

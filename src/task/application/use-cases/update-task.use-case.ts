@@ -1,31 +1,29 @@
-import { Task, TaskStatus } from "src/task/domain/entities/task.entity";
-import { TaskRepository } from "src/task/domain/repositories/task.repository";
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { Task } from "src/task/domain/entities/task.entity";
+import type { TaskRepository } from "src/task/domain/repositories/task.repository";
 import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 
+@Injectable()
 export class UpdateTaskUseCase {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(
+    @Inject('TaskRepository') private readonly taskRepo: TaskRepository
+  ) { }
 
-  async execute( taskId: string, userId: string, dto: UpdateTaskDto): Promise<Task> {
+  async execute(id: string, userId: string, dto: UpdateTaskDto): Promise<Task> {
 
-    const existingTask = await this.taskRepository.findById(taskId, userId);
-
-
-    if (!existingTask) {
-      throw new Error('Task not found');
+    if (!id) {
+      throw new BadRequestException('Task ID is required');
     }
-
-
-    if (existingTask.userId !== userId) {
-      throw new Error('You do not have permission to update this task');
+    if (!userId) {
+      throw new BadRequestException('User authentication is required');
     }
+    if (!dto) {
+      throw new BadRequestException('Task data is required');
+    }
+    const task = await this.taskRepo.findTaskById(id, userId);
 
+    if (!task) throw new NotFoundException('Task is not found');
 
-    const updatedTask = await this.taskRepository.updateTask(taskId, userId, {
-      title: dto.title,
-      description: dto.description,
-      status: (dto.status as TaskStatus) || existingTask.status,
-    });
-
-    return updatedTask;
+    return await this.taskRepo.updateTask(id, userId, dto);
   }
 }

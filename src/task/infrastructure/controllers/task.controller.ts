@@ -1,111 +1,87 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards, NotFoundException, 
-  ForbiddenException, 
-  InternalServerErrorException } from '@nestjs/common';
-import { UpdateTaskUseCase } from '../../application/use-cases/update-task.use-case';
-import { DeleteTaskUseCase } from 'src/task/application/use-cases/delete-task.use-case';
-import { CreateTaskUseCase } from 'src/task/application/use-cases/create-task.use-case';
-import { AuthGuard } from 'src/auth/infrastructure/guards/auth.guard';
-import { CreateTaskDto } from 'src/task/dto/create-task.dto';
-import { UpdateTaskDto } from 'src/task/dto/update-task.dto';
-import { FindAllTaskUseCase } from 'src/task/application/use-cases/find-all-task.use-case';
-import { FindByIdUseCase } from 'src/task/application/use-cases/find-by-id.use-case';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Query,
+    UseGuards,
+    ParseUUIDPipe
+} from "@nestjs/common";
+import { AuthGuard } from "src/auth/infrastructure/guards/auth.guard";
+import { GetUser } from "src/auth/infrastructure/decorators/get-user.decorator";
+
+import { CreateTaskUseCase } from "src/task/application/use-cases/create-task.use-case";
+import { UpdateTaskUseCase } from "src/task/application/use-cases/update-task.use-case";
+import { DeleteTaskUseCase } from "src/task/application/use-cases/delete-task.use-case";
+import { FindTasksForDailyWidgetUseCase } from "src/task/application/use-cases/find-tasks-for-daily-widget.use-case";
+import { FindAllTasksUseCase } from "src/task/application/use-cases/find-all-task.use-case";
+import { FindTaskByIdUseCase } from "src/task/application/use-cases/find-by-id.use-case";
+import { FindTasksByCategoryUseCase } from "src/task/application/use-cases/find-task-by-category.use-case";
+import { CreateTaskDto } from "src/task/dto/create-task.dto";
+import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 
 @Controller('tasks')
+@UseGuards(AuthGuard)
 export class TaskController {
     constructor(
-        private readonly updateTaskUseCase: UpdateTaskUseCase,
-        private readonly deleteTaskUseCase: DeleteTaskUseCase,
-        private readonly createTaskUseCase: CreateTaskUseCase,
-        private readonly findAllTaskUseCase: FindAllTaskUseCase,
-        private readonly findByIdUseCase: FindByIdUseCase,
+        private readonly createUseCase: CreateTaskUseCase,
+        private readonly updateUseCase: UpdateTaskUseCase,
+        private readonly deleteUseCase: DeleteTaskUseCase,
+        private readonly findAllUseCase: FindAllTasksUseCase,
+        private readonly findByIdUseCase: FindTaskByIdUseCase,
+        private readonly findByCategoryUseCase: FindTasksByCategoryUseCase,
+        private readonly findDailyUseCase: FindTasksForDailyWidgetUseCase,
     ) { }
-    @Get()
-    @UseGuards(AuthGuard)
-    async findAll(@Req() req) {
-        try {
-            const tasks = await this.findAllTaskUseCase.execute(req.user.id);
-            return tasks;
 
-        } catch (error) {
-            this.handleErrors(error);
-        }
-    }
 
-    @Get(':id')
-    @UseGuards(AuthGuard)
-    async findOne(
-        @Param('id') taskId: string,
-        @Req() req
+    @Get('daily')
+    async getDailyTasks(
+        @GetUser('id') userId: string,
+        @Query('date') date?: string
     ) {
-        try {
-            const task = await this.findByIdUseCase.execute(taskId, req.user.id);
-            return task;
-        } catch (error) {
-            this.handleErrors(error);
-        }
+
+        return await this.findDailyUseCase.execute(userId, date);
     }
+
 
     @Post()
-    @UseGuards(AuthGuard)
-    async create(@Req() req, @Body() createTaskDto: CreateTaskDto) {
-        try {
-            const task = await this.createTaskUseCase.execute(createTaskDto, req.user.id);
-            return {
-                message: 'Task created successfully',
-                task,
-            };
-
-        } catch (error) {
-            this.handleErrors(error);
-        }
+    async create(@Body() dto: CreateTaskDto, @GetUser('id') userId: string) {
+        return await this.createUseCase.execute(dto, userId);
     }
+
     @Patch(':id')
-    @UseGuards(AuthGuard)
     async update(
-        @Param('id') taskId: string,
-        @Req() req,
-        @Body() updateTaskDto: UpdateTaskDto
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() dto: UpdateTaskDto,
+        @GetUser('id') userId: string
     ) {
-        try {
-            const updatedTask = await this.updateTaskUseCase.execute(req.user.id, taskId, updateTaskDto);
-            return {
-                message: 'Task updated successfully',
-                task: updatedTask,
-            };
-
-
-        } catch (error) {
-            this.handleErrors(error);
-        }
+        return await this.updateUseCase.execute(id, userId, dto);
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard)
-    async delete(
-        @Param('id') taskId: string,
-        @Req() req
-    ) {
-        try {
-            await this.deleteTaskUseCase.execute(req.user.id, taskId);
-            return {
-                message: 'Task deleted successfully',
-            };
-        } catch (error) {
-            this.handleErrors(error);
-        }
-
+    async remove(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') userId: string) {
+        return await this.deleteUseCase.execute(id, userId);
     }
 
 
+    @Get()
+    async findAll(@GetUser('id') userId: string) {
+        return await this.findAllUseCase.execute(userId);
+    }
 
-    private handleErrors(error: any) {
-        if (error.message === 'Task not found') {
-            throw new NotFoundException(error.message);
-        }
-        if (error.message.includes('permission')) {
-            throw new ForbiddenException(error.message);
-        }
-        
-        throw new InternalServerErrorException('An unexpected error occurred'); 
+    @Get('category/:categoryId')
+    async findByCategory(
+        @Param('categoryId', ParseUUIDPipe) categoryId: string,
+        @GetUser('id') userId: string
+    ) {
+        return await this.findByCategoryUseCase.execute(categoryId, userId);
+    }
+
+    @Get(':id')
+    async findOne(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') userId: string) {
+        return await this.findByIdUseCase.execute(id, userId);
     }
 }

@@ -1,22 +1,26 @@
-import { TaskRepository } from "src/task/domain/repositories/task.repository";
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import type { TaskRepository } from "src/task/domain/repositories/task.repository";
 
 
+@Injectable()
 export class DeleteTaskUseCase {
-    constructor(private readonly taskRepository: TaskRepository) {}
+    constructor(
+        @Inject('TaskRepository') private readonly taskRepo: TaskRepository
+    ) { }
 
-    async execute(taskId: string, userId: string): Promise<void> {
-        const task = await this.taskRepository.findById(taskId, userId);
+    async execute(id: string, userId: string): Promise<void> {
 
-        if (!task) {
-            throw new Error('Task not found');
+        if (!id) {
+            throw new BadRequestException('Task ID is required');
+        }
+        if (!userId) {
+            throw new BadRequestException('User authentication is required');
         }
 
-       
-        if (task.userId !== userId) {
-            throw new Error('You do not have permission to delete this task');
-        }
+        const task = await this.taskRepo.findTaskById(id, userId);
 
+        if (!task) throw new NotFoundException('Task ID not found');
 
-        await this.taskRepository.deleteTask(taskId, userId);
+        await this.taskRepo.deleteTask(id, userId);
     }
 }
