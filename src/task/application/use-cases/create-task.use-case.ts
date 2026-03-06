@@ -17,7 +17,11 @@ export class CreateTaskUseCase {
         if (!userId) {
             throw new BadRequestException('User authentication is required');
         }
+        const taskData: Partial<Task> = {
+            ...dto,
+            dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
+        };
 
-        return await this.taskRepo.createTask(userId, dto);
+        return await this.taskRepo.createTask(userId, taskData);
     }
 }
