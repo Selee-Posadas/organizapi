@@ -30,32 +30,9 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
       useClass: JwtAdapter,
     },
 
-    {
-      provide: RegisterUserUseCase,
-      useFactory: (userRepo: UserRepository, hashService: HashService) => {
-        return new RegisterUserUseCase(userRepo, hashService);
-      },
-      inject: ['UserRepository', 'HashService'],
-    },
-
-    {
-      provide: LoginUseCase,
-      useFactory: (
-        userRepo: UserRepository,
-        hashService: HashService,
-        tokenService: AuthTokenService,
-      ) => {
-        return new LoginUseCase(userRepo, hashService, tokenService);
-      },
-      inject: ['UserRepository', 'HashService', 'AuthTokenService'],
-    },
-    {
-      provide: UpdateProfileUseCase,
-      useFactory: (userRepo: UserRepository) => {
-        return new UpdateProfileUseCase(userRepo);
-      },
-      inject: ['UserRepository'],
-    },
+    RegisterUserUseCase,
+    LoginUseCase,
+    UpdateProfileUseCase,
 
     PrismaService,
   ],

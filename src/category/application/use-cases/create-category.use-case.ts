@@ -1,8 +1,14 @@
+import { Injectable, Inject } from '@nestjs/common';
 import { Category } from '../../domain/entities/category.entity';
-import { CategoryRepository } from '../../domain/repositories/category.repository';
+import type { CategoryRepository } from '../../domain/repositories/category.repository';
 import { CreateCategoryDto } from '../../dto/create-category.dto';
+
+@Injectable()
 export class CreateCategoryUseCase {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(
+    @Inject('CategoryRepository')
+    private readonly categoryRepository: CategoryRepository,
+  ) {}
 
   async execute(dto: CreateCategoryDto, userId: string): Promise<Category> {
     const existingCategory = await this.categoryRepository.findCategoryByName(

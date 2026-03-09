@@ -1,7 +1,12 @@
-import { CategoryRepository } from '../../domain/repositories/category.repository';
+import { Injectable, Inject } from '@nestjs/common';
+import type { CategoryRepository } from '../../domain/repositories/category.repository';
 
+@Injectable()
 export class DeleteCategoryUseCase {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(
+    @Inject('CategoryRepository')
+    private readonly categoryRepository: CategoryRepository,
+  ) {}
 
   async execute(categoryId: string, userId: string): Promise<void> {
     const category = await this.categoryRepository.findById(categoryId, userId);

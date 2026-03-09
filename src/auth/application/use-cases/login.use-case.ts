@@ -1,13 +1,18 @@
-import { AuthTokenService } from 'src/auth/domain/ports/auth-token-service.interface';
-import { HashService } from 'src/auth/domain/ports/hash-service.interface';
+import { Injectable, Inject } from '@nestjs/common';
+import type { AuthTokenService } from 'src/auth/domain/ports/auth-token-service.interface';
+import type { HashService } from 'src/auth/domain/ports/hash-service.interface';
 import { LoginResponse } from 'src/auth/domain/ports/login-response.interface';
-import { UserRepository } from 'src/auth/domain/repositories/user.repository';
+import type { UserRepository } from 'src/auth/domain/repositories/user.repository';
 import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 
+@Injectable()
 export class LoginUseCase {
   constructor(
+    @Inject('UserRepository')
     private readonly userRepository: UserRepository,
+    @Inject('HashService')
     private readonly hashService: HashService,
+    @Inject('AuthTokenService')
     private readonly tokenService: AuthTokenService,
   ) {}
   async execute(dto: LoginUserDto): Promise<LoginResponse> {

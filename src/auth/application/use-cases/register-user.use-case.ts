@@ -1,11 +1,15 @@
+import { Injectable, Inject } from '@nestjs/common';
 import { User } from 'src/auth/domain/entities/user.entity';
-import { HashService } from 'src/auth/domain/ports/hash-service.interface';
-import { UserRepository } from 'src/auth/domain/repositories/user.repository';
+import type { HashService } from 'src/auth/domain/ports/hash-service.interface';
+import type { UserRepository } from 'src/auth/domain/repositories/user.repository';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 
+@Injectable()
 export class RegisterUserUseCase {
   constructor(
+    @Inject('UserRepository')
     private readonly userRepository: UserRepository,
+    @Inject('HashService')
     private readonly hashService: HashService,
   ) {}
 

@@ -1,9 +1,14 @@
+import { Injectable, Inject } from '@nestjs/common';
 import { Category } from '../../domain/entities/category.entity';
-import { CategoryRepository } from '../../domain/repositories/category.repository';
+import type { CategoryRepository } from '../../domain/repositories/category.repository';
 import { UpdateCategoryDto } from '../../dto/update-category.dto';
 
+@Injectable()
 export class UpdateCategoryUseCase {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(
+    @Inject('CategoryRepository')
+    private readonly categoryRepository: CategoryRepository,
+  ) {}
 
   async execute(
     categoryId: string,

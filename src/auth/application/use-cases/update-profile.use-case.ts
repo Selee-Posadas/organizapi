@@ -1,9 +1,14 @@
-import { UserRepository } from 'src/auth/domain/repositories/user.repository';
+import { Injectable, Inject } from '@nestjs/common';
+import type { UserRepository } from 'src/auth/domain/repositories/user.repository';
 import { UpdateUserDto } from 'src/auth/dto/update-user.dto';
 import { User } from 'src/auth/domain/entities/user.entity';
 
+@Injectable()
 export class UpdateProfileUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    @Inject('UserRepository')
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async execute(userId: string, dto: UpdateUserDto): Promise<User> {
     if (dto.email) {
