@@ -1,4 +1,12 @@
-import { IsString, IsInt, Min, IsUUID, MinLength, IsOptional, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  Min,
+  IsUUID,
+  MinLength,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
 import { SubjectType } from 'src/university/domain/enums/subject-type.enum';
 
 export class CreateSubjectDto {

@@ -15,7 +15,8 @@ import { FindContactsByCareerUseCase } from './application/use-cases/contact/fin
 import { ContactController } from './infrastructure/controllers/contact/contact.controller';
 import { PrismaContactRepository } from './infrastructure/repositories/prisma-contact.repository';
 import { PrismaEnrollmentRepository } from './infrastructure/repositories/prisma-enrollment.repository';
-
+import { PrismaModule } from 'src/infrastructure/prisma/prisma.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 const ContactUseCases = [
   CreateContactUseCase,
@@ -33,7 +34,7 @@ const ContactUseCases = [
 ];
 
 @Module({
-  imports: [],
+  imports: [PrismaModule, AuthModule],
   controllers: [ContactController],
   providers: [
     PrismaService,

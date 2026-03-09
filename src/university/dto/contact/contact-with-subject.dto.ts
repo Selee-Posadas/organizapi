@@ -1,4 +1,4 @@
-import { ContactRule } from "src/university/domain/enums/contact-role.enum";
+import { ContactRule } from 'src/university/domain/enums/contact-role.enum';
 
 export class ContactWithSubjectDto {
   id: string;
@@ -8,5 +8,5 @@ export class ContactWithSubjectDto {
   phone?: string;
   whatsappLink?: string;
   notes?: string;
-  subjectName: string; 
+  subjectName: string;
 }

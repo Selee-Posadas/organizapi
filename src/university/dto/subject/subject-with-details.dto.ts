@@ -3,7 +3,7 @@ import { EnrollmentStatus } from '../../domain/enums/enrollment-status.enum';
 
 export class SubjectCorrelativeDetailDto {
   requiredSubjectId: string;
-  name: string; 
+  name: string;
   type: EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED;
 }
 

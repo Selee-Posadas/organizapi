@@ -1,5 +1,5 @@
 export enum ContactRule {
-    PROFESSOR = 'PROFESSOR',
-    TUTOR = 'TUTOR',
-    PEER = 'PEER',
+  PROFESSOR = 'PROFESSOR',
+  TUTOR = 'TUTOR',
+  PEER = 'PEER',
 }

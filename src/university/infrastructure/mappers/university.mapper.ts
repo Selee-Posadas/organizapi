@@ -1,5 +1,8 @@
 import { Career } from '../../domain/entities/career.entity';
-import { Subject, SubjectCorrelativeInfo } from '../../domain/entities/subject.entity';
+import {
+  Subject,
+  SubjectCorrelativeInfo,
+} from '../../domain/entities/subject.entity';
 import { Enrollment } from '../../domain/entities/enrollment.entity';
 import { EnrollmentStatus } from '../../domain/enums/enrollment-status.enum';
 import { AcademicEvaluation } from 'src/university/domain/entities/academic-evaluation.entity';
@@ -13,13 +16,15 @@ import { EnrollmentWithDetailsDto } from 'src/university/dto/enrollment/enrollme
 import { ScheduleWithDetailsDto } from 'src/university/dto/schedule/schedule-with-details.dto';
 import { EvaluationWithDetailsDto } from 'src/university/dto/evaluation/evaluation-with-details.dto';
 import { SubjectType } from 'src/university/domain/enums/subject-type.enum';
-import { SubjectCorrelativeDetailDto, SubjectWithDetailsDto } from 'src/university/dto/subject/subject-with-details.dto';
+import {
+  SubjectCorrelativeDetailDto,
+  SubjectWithDetailsDto,
+} from 'src/university/dto/subject/subject-with-details.dto';
 import { Resource } from 'src/university/domain/entities/resource.entity';
 import { ResourceType } from 'src/university/domain/enums/resouce-type.enum';
 import { ResourceWithDetailsDto } from 'src/university/dto/resource/resource-with-details.dto';
 
 export class UniversityMapper {
-
   static toDomainCareer(raw: any): Career {
     return new Career(
       raw.id,
@@ -28,16 +33,17 @@ export class UniversityMapper {
       raw.institution,
       raw.type as StudyType,
       raw.whatsappGroup,
-      raw.facultyContactInfo
+      raw.facultyContactInfo,
     );
   }
 
   static toDomainSubject(raw: any): Subject {
-    const correlatives: SubjectCorrelativeInfo[] = raw.correlatives?.map((c: any) => ({
-      requiredSubjectId: c.requiredSubjectId,
-      name: c.requiredSubject?.name,
-      type: c.type as EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED,
-    })) || [];
+    const correlatives: SubjectCorrelativeInfo[] =
+      raw.correlatives?.map((c: any) => ({
+        requiredSubjectId: c.requiredSubjectId,
+        name: c.requiredSubject?.name,
+        type: c.type as EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED,
+      })) || [];
     return new Subject(
       raw.id,
       raw.careerId,
@@ -45,16 +51,17 @@ export class UniversityMapper {
       raw.yearLevel,
       raw.semester as SubjectType,
       raw.credits,
-      correlatives
+      correlatives,
     );
   }
 
   static toResponseSubjectDto(raw: any): SubjectWithDetailsDto {
-    const correlatives: SubjectCorrelativeDetailDto[] = raw.correlatives?.map((c: any) => ({
-      requiredSubjectId: c.requiredSubjectId,
-      name: c.requiredSubject?.name || 'Unknown Subject',
-      type: c.type as EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED,
-    })) || [];
+    const correlatives: SubjectCorrelativeDetailDto[] =
+      raw.correlatives?.map((c: any) => ({
+        requiredSubjectId: c.requiredSubjectId,
+        name: c.requiredSubject?.name || 'Unknown Subject',
+        type: c.type as EnrollmentStatus.REGULAR | EnrollmentStatus.APPROVED,
+      })) || [];
 
     return {
       id: raw.id,
@@ -63,11 +70,9 @@ export class UniversityMapper {
       yearLevel: raw.yearLevel,
       semester: raw.semester as SubjectType,
       credits: raw.credits,
-      correlatives
+      correlatives,
     };
   }
-
-
 
   static toDomainEnrollment(raw: any): Enrollment {
     return new Enrollment(
@@ -77,7 +82,7 @@ export class UniversityMapper {
       raw.status as EnrollmentStatus,
       raw.academicYear,
       raw.finalGrade,
-      raw.createdAt
+      raw.createdAt,
     );
   }
 
@@ -88,7 +93,7 @@ export class UniversityMapper {
       academicYear: raw.academicYear,
       finalGrade: raw.finalGrade,
       subjectName: raw.subject?.name || 'Unknown Subject',
-      careerName: raw.subject?.career?.name || 'Unknown Career'
+      careerName: raw.subject?.career?.name || 'Unknown Career',
     };
   }
 
@@ -101,7 +106,7 @@ export class UniversityMapper {
       raw.status,
       raw.topics,
       raw.grade,
-      raw.reflection
+      raw.reflection,
     );
   }
 
@@ -128,7 +133,7 @@ export class UniversityMapper {
       raw.startTime,
       raw.endTime,
       raw.type as ScheduleType,
-      raw.location
+      raw.location,
     );
   }
 
@@ -155,7 +160,7 @@ export class UniversityMapper {
       raw.email,
       raw.phone,
       raw.whatsappLink,
-      raw.notes
+      raw.notes,
     );
   }
 
@@ -168,7 +173,7 @@ export class UniversityMapper {
       phone: raw.phone,
       whatsappLink: raw.whatsappLink,
       notes: raw.notes,
-      subjectName: raw.enrollment?.subject?.name || 'Unknown Subject'
+      subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
     };
   }
 
@@ -179,7 +184,7 @@ export class UniversityMapper {
       raw.name,
       raw.type as ResourceType,
       raw.url,
-      raw.isRead
+      raw.isRead,
     );
   }
 
@@ -191,8 +196,7 @@ export class UniversityMapper {
       type: raw.type,
       isRead: raw.isRead,
       subjectName: raw.enrollment?.subject?.name || 'Unknown Subject',
-      enrollmentId: raw.enrollmentId
+      enrollmentId: raw.enrollmentId,
     };
   }
-
 }

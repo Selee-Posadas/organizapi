@@ -12,16 +12,14 @@ import { JwtAdapter } from './infrastructure/adapters/jwt.adapter';
 import { AuthTokenService } from './domain/ports/auth-token-service.interface';
 import { UpdateProfileUseCase } from './application/use-cases/update-profile.use-case';
 
-
 @Module({
   controllers: [AuthController],
   providers: [
-   
-    { 
+    {
       provide: 'HashService',
       useClass: BcryptAdapter,
     },
-  
+
     {
       provide: 'UserRepository',
       useClass: PrismaUserRepository,
@@ -31,7 +29,7 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
       provide: 'AuthTokenService',
       useClass: JwtAdapter,
     },
-   
+
     {
       provide: RegisterUserUseCase,
       useFactory: (userRepo: UserRepository, hashService: HashService) => {
@@ -42,7 +40,11 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
 
     {
       provide: LoginUseCase,
-      useFactory: (userRepo: UserRepository, hashService: HashService, tokenService: AuthTokenService) => {
+      useFactory: (
+        userRepo: UserRepository,
+        hashService: HashService,
+        tokenService: AuthTokenService,
+      ) => {
         return new LoginUseCase(userRepo, hashService, tokenService);
       },
       inject: ['UserRepository', 'HashService', 'AuthTokenService'],
@@ -54,15 +56,17 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
       },
       inject: ['UserRepository'],
     },
-    
+
     PrismaService,
-  ], 
+  ],
   imports: [
     JwtModule.registerAsync({
       useFactory: () => {
         const secret = process.env.JWT_SECRET;
         if (!secret || secret.length === 0) {
-          throw new Error('FATAL: JWT_SECRET environment variable is not defined');
+          throw new Error(
+            'FATAL: JWT_SECRET environment variable is not defined',
+          );
         }
         return {
           secret,
@@ -71,6 +75,11 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
       },
     }),
   ],
-  exports: [RegisterUserUseCase, LoginUseCase, 'AuthTokenService', UpdateProfileUseCase],
+  exports: [
+    RegisterUserUseCase,
+    LoginUseCase,
+    'AuthTokenService',
+    UpdateProfileUseCase,
+  ],
 })
 export class AuthModule {}

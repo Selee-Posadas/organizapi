@@ -1,4 +1,4 @@
-import { ScheduleType } from "../enums/schedule-type.enum";
+import { ScheduleType } from '../enums/schedule-type.enum';
 
 export class Schedule {
   constructor(
@@ -8,7 +8,7 @@ export class Schedule {
     public readonly startTime: string,
     public readonly endTime: string,
     public readonly type: ScheduleType,
-    public readonly location?: string | null
+    public readonly location?: string | null,
   ) {
     if (dayOfWeek < 1 || dayOfWeek > 7) throw new Error('Invalid day of week');
   }

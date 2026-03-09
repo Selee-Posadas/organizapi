@@ -1,5 +1,5 @@
 export enum ResourceType {
-    PDF = 'PDF',
-    VIDEO = 'VIDEO',
-    LINK = 'LINK'
+  PDF = 'PDF',
+  VIDEO = 'VIDEO',
+  LINK = 'LINK',
 }

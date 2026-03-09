@@ -1,4 +1,4 @@
-import { EvaluationType } from "../enums/evaluation-type.enum";
+import { EvaluationType } from '../enums/evaluation-type.enum';
 
 export class AcademicEvaluation {
   constructor(
@@ -9,6 +9,6 @@ export class AcademicEvaluation {
     public readonly status: string,
     public readonly topics?: string | null,
     public readonly grade?: number | null,
-    public readonly reflection?: string | null
+    public readonly reflection?: string | null,
   ) {}
 }

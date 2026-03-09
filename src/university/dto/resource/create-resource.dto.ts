@@ -1,4 +1,11 @@
-import { IsString, IsEnum, IsUrl, IsOptional, IsUUID, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsUrl,
+  IsOptional,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
 import { ResourceType } from 'src/university/domain/enums/resouce-type.enum';
 
 export class CreateResourceDto {
@@ -16,4 +23,3 @@ export class CreateResourceDto {
   @IsUrl()
   url?: string;
 }
-

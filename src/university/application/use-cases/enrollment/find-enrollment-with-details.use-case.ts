@@ -4,16 +4,18 @@ import { EnrollmentWithDetailsDto } from 'src/university/dto/enrollment/enrollme
 
 @Injectable()
 export class FindAllEnrollmentsWithDetailsUseCase {
-    constructor(
-        @Inject('EnrollmentRepository')
-        private readonly enrollRepository: EnrollmentRepository,
-    ) { }
+  constructor(
+    @Inject('EnrollmentRepository')
+    private readonly enrollRepository: EnrollmentRepository,
+  ) {}
 
-    async execute(userId: string): Promise<EnrollmentWithDetailsDto[]> {
-        if (!userId) {
-            throw new BadRequestException('User authentication is required to fetch academic details');
-        }
-
-        return await this.enrollRepository.findAllEnrollmentsWithDetails(userId);
+  async execute(userId: string): Promise<EnrollmentWithDetailsDto[]> {
+    if (!userId) {
+      throw new BadRequestException(
+        'User authentication is required to fetch academic details',
+      );
     }
+
+    return await this.enrollRepository.findAllEnrollmentsWithDetails(userId);
+  }
 }

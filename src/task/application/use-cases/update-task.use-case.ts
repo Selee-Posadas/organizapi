@@ -1,16 +1,20 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { Task } from "src/task/domain/entities/task.entity";
-import type { TaskRepository } from "src/task/domain/repositories/task.repository";
-import { UpdateTaskDto } from "src/task/dto/update-task.dto";
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Task } from 'src/task/domain/entities/task.entity';
+import type { TaskRepository } from 'src/task/domain/repositories/task.repository';
+import { UpdateTaskDto } from 'src/task/dto/update-task.dto';
 
 @Injectable()
 export class UpdateTaskUseCase {
   constructor(
-    @Inject('TaskRepository') private readonly taskRepo: TaskRepository
-  ) { }
+    @Inject('TaskRepository') private readonly taskRepo: TaskRepository,
+  ) {}
 
   async execute(id: string, userId: string, dto: UpdateTaskDto): Promise<Task> {
-
     if (!id) {
       throw new BadRequestException('Task ID is required');
     }

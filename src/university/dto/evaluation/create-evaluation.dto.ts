@@ -1,4 +1,13 @@
-import { IsString, IsEnum, IsUUID, IsDateString, IsOptional, IsNumber, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsUUID,
+  IsDateString,
+  IsOptional,
+  IsNumber,
+  Min,
+  Max,
+} from 'class-validator';
 import { EvaluationType } from 'src/university/domain/enums/evaluation-type.enum';
 
 export class CreateEvaluationDto {

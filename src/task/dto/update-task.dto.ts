@@ -1,7 +1,6 @@
 import { IsString, IsOptional, IsEnum, MinLength } from 'class-validator';
 import { TaskStatus } from '../domain/enum/task-status.enum';
 
-
 export class UpdateTaskDto {
   @IsOptional()
   @IsString()

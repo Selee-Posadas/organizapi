@@ -1,4 +1,4 @@
-import { ContactRule } from "../enums/contact-role.enum";
+import { ContactRule } from '../enums/contact-role.enum';
 
 export class Contact {
   constructor(

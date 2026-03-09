@@ -15,13 +15,12 @@ export class PrismaUserRepository implements UserRepository {
 
     if (!user) return null;
 
-
     return UserMapper.toDomain(user);
   }
 
   async create(user: User): Promise<User> {
     const data = UserMapper.toPersistence(user);
-    
+
     const createdUser = await this.prisma.user.create({
       data,
     });
@@ -38,5 +37,4 @@ export class PrismaUserRepository implements UserRepository {
 
     return UserMapper.toDomain(updatedUser);
   }
-
 }

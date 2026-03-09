@@ -1,5 +1,5 @@
 export enum EnergyLevel {
-    HIGH = 'HIGH',
-    MEDIUM = 'MEDIUM',
-    LOW = 'LOW'
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW',
 }

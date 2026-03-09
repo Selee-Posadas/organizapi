@@ -7,7 +7,7 @@ import {
   Get,
   Req,
   UseGuards,
-  Patch
+  Patch,
 } from '@nestjs/common';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,33 +19,27 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
 
 @Controller('auth')
 export class AuthController {
-
   constructor(
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly loginUseCase: LoginUseCase,
     private readonly updateProfileUseCase: UpdateProfileUseCase,
-  ) { }
+  ) {}
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
     try {
-
       const user = await this.registerUserUseCase.execute(createUserDto);
 
       const { passwordHash, ...safeUser } = user;
-
 
       return {
         message: 'User registered successfully',
         user: safeUser,
       };
-
     } catch (error) {
       if (error.message === 'User with this email already exists') {
-
         throw new ConflictException(error.message);
       }
-
 
       throw error;
     }
@@ -54,7 +48,8 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
     try {
-      const { user, accessToken } = await this.loginUseCase.execute(loginUserDto);
+      const { user, accessToken } =
+        await this.loginUseCase.execute(loginUserDto);
       const { passwordHash, ...safeUser } = user;
 
       return {
@@ -68,35 +63,32 @@ export class AuthController {
       } else {
         throw error;
       }
-
     }
   }
 
- @Patch('me')
-@UseGuards(AuthGuard)
-async updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
-  try {
+  @Patch('me')
+  @UseGuards(AuthGuard)
+  async updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    try {
+      const updatedUser = await this.updateProfileUseCase.execute(
+        req.user.id,
+        updateUserDto,
+      );
 
-    const updatedUser = await this.updateProfileUseCase.execute(req.user.id, updateUserDto);
+      const { passwordHash, ...safeUser } = updatedUser;
 
+      return {
+        message: 'Profile updated successfully',
+        user: safeUser,
+      };
+    } catch (error) {
+      if (error.message === 'Email already in use by another account') {
+        throw new ConflictException(error.message);
+      }
 
-    const { passwordHash, ...safeUser } = updatedUser;
-    
-    return {
-      message: 'Profile updated successfully',
-      user: safeUser,
-    };
-
-  } catch (error) {
-
-    if (error.message === 'Email already in use by another account') {
-      throw new ConflictException(error.message);
+      throw error;
     }
-
-    throw error;
   }
-}
-
 
   //esto es de prueba, despues borrar
   @Get('profile')
@@ -105,7 +97,6 @@ async updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     return {
       message: 'Esto es una prueba de perfil protegido',
       user: req.user,
-    }
+    };
   }
-
 }

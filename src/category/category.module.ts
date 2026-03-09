@@ -15,45 +15,45 @@ import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
   controllers: [CategoryController],
   providers: [
     {
-          provide: 'CategoryRepository',
-          useClass: PrismaCategoryRepository,
-        },
-        {
-          provide: FindAllCategoryUseCase,
-          useFactory: (categoryRepo: CategoryRepository) => {
-            return new FindAllCategoryUseCase(categoryRepo);
-          },
-          inject: ['CategoryRepository'],
-        },
-        {
-          provide: FindCategoryByIdUseCase,
-          useFactory: (categoryRepo: CategoryRepository) => {
-            return new FindCategoryByIdUseCase(categoryRepo);
-          },
-          inject: ['CategoryRepository'],
-        },
-        {
-          provide: CreateCategoryUseCase,
-          useFactory: (categoryRepo: CategoryRepository) => {
-            return new CreateCategoryUseCase(categoryRepo);
-          },
-          inject: ['CategoryRepository'],
-        },
-        {
-          provide: UpdateCategoryUseCase,
-          useFactory: (categoryRepo: CategoryRepository) => {
-            return new UpdateCategoryUseCase(categoryRepo);
-          },
-          inject: ['CategoryRepository'],
-        },
-        {
-          provide: DeleteCategoryUseCase,
-          useFactory: (categoryRepo: CategoryRepository) => {
-            return new DeleteCategoryUseCase(categoryRepo);
-          },
-          inject: ['CategoryRepository'],
-        },
-        PrismaService,
-  ]
+      provide: 'CategoryRepository',
+      useClass: PrismaCategoryRepository,
+    },
+    {
+      provide: FindAllCategoryUseCase,
+      useFactory: (categoryRepo: CategoryRepository) => {
+        return new FindAllCategoryUseCase(categoryRepo);
+      },
+      inject: ['CategoryRepository'],
+    },
+    {
+      provide: FindCategoryByIdUseCase,
+      useFactory: (categoryRepo: CategoryRepository) => {
+        return new FindCategoryByIdUseCase(categoryRepo);
+      },
+      inject: ['CategoryRepository'],
+    },
+    {
+      provide: CreateCategoryUseCase,
+      useFactory: (categoryRepo: CategoryRepository) => {
+        return new CreateCategoryUseCase(categoryRepo);
+      },
+      inject: ['CategoryRepository'],
+    },
+    {
+      provide: UpdateCategoryUseCase,
+      useFactory: (categoryRepo: CategoryRepository) => {
+        return new UpdateCategoryUseCase(categoryRepo);
+      },
+      inject: ['CategoryRepository'],
+    },
+    {
+      provide: DeleteCategoryUseCase,
+      useFactory: (categoryRepo: CategoryRepository) => {
+        return new DeleteCategoryUseCase(categoryRepo);
+      },
+      inject: ['CategoryRepository'],
+    },
+    PrismaService,
+  ],
 })
 export class CategoryModule {}
