@@ -6,7 +6,8 @@ import { ScheduleWithDetailsDto } from 'src/university/dto/schedule/schedule-wit
 @Injectable()
 export class GetTodayClassesUseCase {
   constructor(
-    @Inject('ScheduleRepository') private readonly scheduleRepo: ScheduleRepository,
+    @Inject('ScheduleRepository')
+    private readonly scheduleRepo: ScheduleRepository,
   ) {}
 
   async execute(userId: string): Promise<ScheduleWithDetailsDto[]> {
@@ -18,6 +19,9 @@ export class GetTodayClassesUseCase {
     const dayForRepo =
       todayJS === 0 ? DayOfWeek.SUNDAY : (todayJS as DayOfWeek);
 
-    return await this.scheduleRepo.findSchedulesByDayWithDetails(dayForRepo, userId);
+    return await this.scheduleRepo.findSchedulesByDayWithDetails(
+      dayForRepo,
+      userId,
+    );
   }
 }

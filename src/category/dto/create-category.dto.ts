@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsOptional, IsString, IsEnum, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsEnum,
+  IsUUID,
+} from 'class-validator';
 import { CategoryType } from 'src/category/domain/enum/category-type.enum';
 
 export class CreateCategoryDto {

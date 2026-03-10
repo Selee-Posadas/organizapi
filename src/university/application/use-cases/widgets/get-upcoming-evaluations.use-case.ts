@@ -14,8 +14,7 @@ export class GetUpcomingEvaluationsUseCase {
       throw new BadRequestException('User authentication is required');
     }
 
-    const allEvaluations =
-      await this.evaluationRepo.findAllEvaluation(userId);
+    const allEvaluations = await this.evaluationRepo.findAllEvaluation(userId);
 
     const now = new Date();
     const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);

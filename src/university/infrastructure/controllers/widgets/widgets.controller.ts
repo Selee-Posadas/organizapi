@@ -27,7 +27,9 @@ export class WidgetsController {
   }
 
   @Get('upcoming-evaluations')
-  async getUpcomingEvaluations(@GetUser('id', new ParseUUIDPipe()) userId: string) {
+  async getUpcomingEvaluations(
+    @GetUser('id', new ParseUUIDPipe()) userId: string,
+  ) {
     return await this.getUpcomingEvaluationsUseCase.execute(userId);
   }
 
@@ -36,6 +38,9 @@ export class WidgetsController {
     @GetUser('id', new ParseUUIDPipe()) userId: string,
     @Query('energyFilter') energyFilter?: EnergyLevel,
   ) {
-    return await this.getPendingAcademicTasksUseCase.execute(userId, energyFilter);
+    return await this.getPendingAcademicTasksUseCase.execute(
+      userId,
+      energyFilter,
+    );
   }
 }

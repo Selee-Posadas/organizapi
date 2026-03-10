@@ -10,10 +10,7 @@ export class GetPendingAcademicTasksUseCase {
     @Inject('TaskRepository') private readonly taskRepo: TaskRepository,
   ) {}
 
-  async execute(
-    userId: string,
-    energyRequired?: EnergyLevel,
-  ): Promise<Task[]> {
+  async execute(userId: string, energyRequired?: EnergyLevel): Promise<Task[]> {
     if (!userId) {
       throw new BadRequestException('User authentication is required');
     }
@@ -23,7 +20,8 @@ export class GetPendingAcademicTasksUseCase {
     return allTasks.filter((task) => {
       const hasEnrollment = !!task.enrollmentId;
       const isPending = task.status === TaskStatus.PENDING;
-      const matchesEnergy = !energyRequired || task.energyRequired === energyRequired;
+      const matchesEnergy =
+        !energyRequired || task.energyRequired === energyRequired;
 
       return hasEnrollment && isPending && matchesEnergy;
     });
