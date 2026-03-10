@@ -7,16 +7,7 @@ import { ScheduleModule } from './schedule.module';
 import { ContactModule } from './contact.module';
 import { ResourceModule } from './resource.module';
 import { TaskModule } from 'src/task/task.module';
-import { UniversityController } from './infrastructure/controllers/university.controller';
-import { GetTodayClassesUseCase } from './application/use-cases/widgets/get-today-classes.use-case';
-import { GetUpcomingEvaluationsUseCase } from './application/use-cases/widgets/get-upcoming-evaluations.use-case';
-import { GetPendingAcademicTasksUseCase } from './application/use-cases/widgets/get-pending-academic-tasks.use-case';
-
-const WidgetUseCases = [
-  GetTodayClassesUseCase,
-  GetUpcomingEvaluationsUseCase,
-  GetPendingAcademicTasksUseCase,
-];
+import { WidgetsModule } from 'src/university/widgets.module';
 
 @Module({
   imports: [
@@ -27,10 +18,9 @@ const WidgetUseCases = [
     ScheduleModule,
     ContactModule,
     ResourceModule,
+    WidgetsModule,
     TaskModule,
   ],
-  controllers: [UniversityController],
-  providers: [...WidgetUseCases],
   exports: [
     CareerModule,
     SubjectModule,
@@ -39,8 +29,8 @@ const WidgetUseCases = [
     ScheduleModule,
     ContactModule,
     ResourceModule,
+    WidgetsModule,
     TaskModule,
-    ...WidgetUseCases,
   ],
 })
 export class UniversityModule {}
