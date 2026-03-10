@@ -15,6 +15,7 @@ export class TaskMapper {
       raw.userId,
       raw.goalId,
       raw.categoryId,
+      raw.enrollmentId,
       raw.dueDate,
       raw.startTime,
       raw.endTime,
@@ -35,6 +36,8 @@ export class TaskMapper {
     if (data.goalId !== undefined) persistenceData.goalId = data.goalId;
     if (data.categoryId !== undefined)
       persistenceData.categoryId = data.categoryId;
+    if (data.enrollmentId !== undefined)
+      persistenceData.enrollmentId = data.enrollmentId;
     if (data.dueDate !== undefined) persistenceData.dueDate = data.dueDate;
     if (data.startTime !== undefined)
       persistenceData.startTime = data.startTime;

@@ -15,6 +15,13 @@ enum StudyType {
   OTHER
 }
 
+enum CategoryType {
+  TASK
+  UNIVERSITY
+  FINANCE
+  HABIT
+}
+
 model User {
   id            String       @id @default(uuid())
   email         String       @unique
@@ -34,9 +41,13 @@ model User {
 model Category {
   id        String   @id @default(uuid())
   name      String
+  icon      String?  // visual aid for UI
   color     String?
+  type      CategoryType @default(TASK)
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+  careerId  String?    // optional link to a career
+  career    Career?    @relation(fields: [careerId], references: [id])
   task      Task[]
   createdAt DateTime @default(now())
 
@@ -64,6 +75,9 @@ model Task {
   categoryId      String?
   category        Category? @relation(fields: [categoryId], references: [id])
 
+  enrollmentId    String?   // relacionado a una materia
+  enrollment      Enrollment? @relation(fields: [enrollmentId], references: [id])
+
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -80,6 +94,7 @@ model Career {
   userId             String
   user               User      @relation(fields: [userId], references: [id])
   subjects           Subject[]
+  categories         Category[]
 }
 
 model Subject {
@@ -121,6 +136,7 @@ model Enrollment {
   contacts    Contact[]
   evaluations AcademicEvaluation[]
   resources   Resource[]
+  tasks       Task[]
 
   @@unique([id, userId])
   @@unique([userId, subjectId])

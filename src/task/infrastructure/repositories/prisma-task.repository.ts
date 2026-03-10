@@ -22,6 +22,7 @@ export class PrismaTaskRepository implements TaskRepository {
         userId: userId,
         goalId: data.goalId,
         categoryId: data.categoryId,
+        enrollmentId: data.enrollmentId,
         dueDate: data.dueDate,
         startTime: data.startTime,
         endTime: data.endTime,
@@ -75,6 +76,17 @@ export class PrismaTaskRepository implements TaskRepository {
   ): Promise<Task[]> {
     const tasks = await this.prisma.task.findMany({
       where: { categoryId, userId },
+      include: { category: true },
+    });
+    return tasks.map(TaskMapper.toDomain);
+  }
+
+  async findTasksByEnrollment(
+    enrollmentId: string,
+    userId: string,
+  ): Promise<Task[]> {
+    const tasks = await this.prisma.task.findMany({
+      where: { enrollmentId, userId },
       include: { category: true },
     });
     return tasks.map(TaskMapper.toDomain);

@@ -13,11 +13,12 @@ export class Task {
     public readonly userId: string,
     public readonly goalId: string | null = null,
     public readonly categoryId: string | null = null,
+    public readonly enrollmentId: string | null = null,
     public readonly dueDate: Date | null = null,
     public readonly startTime: string | null = null,
     public readonly endTime: string | null = null,
     public readonly createdAt: Date = new Date(),
   ) {
-    if (!title || title.length < 3) throw new Error('The tittle is to low');
+    if (!title || title.length < 3) throw new Error('The title is too low');
   }
 }

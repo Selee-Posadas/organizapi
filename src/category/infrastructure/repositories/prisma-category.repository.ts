@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from 'src/category/domain/entities/category.entity';
 import { CategoryRepository } from 'src/category/domain/repositories/category.repository';
+import { CategoryType } from 'src/category/domain/enum/category-type.enum';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 import { CategoryMapper } from '../mappers/category.mapper';
 
@@ -32,6 +33,20 @@ export class PrismaCategoryRepository implements CategoryRepository {
   async findAllByUserId(userId: string): Promise<Category[]> {
     const categories = await this.prisma.category.findMany({
       where: { userId },
+    });
+    if (!categories) return [];
+    return categories.map(CategoryMapper.toDomain);
+  }
+
+  async findAllByCategory(
+    userId: string,
+    type?: CategoryType,
+  ): Promise<Category[]> {
+    const categories = await this.prisma.category.findMany({
+      where: {
+        userId,
+        ...(type && { type }),
+      },
     });
     if (!categories) return [];
     return categories.map(CategoryMapper.toDomain);
