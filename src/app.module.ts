@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { TaskModule } from './task/task.module';
 import { CategoryModule } from './category/category.module';
 import { UniversityModule } from './university/university.module';
+import { WidgetsModule } from './university/widgets.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UniversityModule } from './university/university.module';
     TaskModule,
     CategoryModule,
     UniversityModule,
+    WidgetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

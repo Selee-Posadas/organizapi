@@ -7,7 +7,6 @@ import { ScheduleModule } from './schedule.module';
 import { ContactModule } from './contact.module';
 import { ResourceModule } from './resource.module';
 import { TaskModule } from 'src/task/task.module';
-import { WidgetsModule } from 'src/university/widgets.module';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { WidgetsModule } from 'src/university/widgets.module';
     ScheduleModule,
     ContactModule,
     ResourceModule,
-    WidgetsModule,
     TaskModule,
   ],
   exports: [
@@ -29,7 +27,6 @@ import { WidgetsModule } from 'src/university/widgets.module';
     ScheduleModule,
     ContactModule,
     ResourceModule,
-    WidgetsModule,
     TaskModule,
   ],
 })

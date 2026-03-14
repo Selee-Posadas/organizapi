@@ -33,6 +33,24 @@ export class WidgetsController {
     return await this.getUpcomingEvaluationsUseCase.execute(userId);
   }
 
+  @Get('overview')
+  async getOverview(
+    @GetUser('id', new ParseUUIDPipe()) userId: string,
+    @Query('energyFilter') energyFilter?: EnergyLevel,
+  ) {
+    const [todayClasses, upcomingEvaluations, pendingTasks] = await Promise.all([
+      this.getTodayClassesUseCase.execute(userId),
+      this.getUpcomingEvaluationsUseCase.execute(userId),
+      this.getPendingAcademicTasksUseCase.execute(userId, energyFilter),
+    ]);
+
+    return {
+      todayClasses,
+      upcomingEvaluations,
+      pendingTasks,
+    };
+  }
+
   @Get('pending-academic-tasks')
   async getPendingAcademicTasks(
     @GetUser('id', new ParseUUIDPipe()) userId: string,

@@ -41,12 +41,12 @@ model User {
 model Category {
   id        String   @id @default(uuid())
   name      String
-  icon      String?  // visual aid for UI
+  icon      String?  
   color     String?
   type      CategoryType @default(TASK)
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  careerId  String?    // optional link to a career
+  careerId  String?   
   career    Career?    @relation(fields: [careerId], references: [id])
   task      Task[]
   createdAt DateTime @default(now())
@@ -75,7 +75,7 @@ model Task {
   categoryId      String?
   category        Category? @relation(fields: [categoryId], references: [id])
 
-  enrollmentId    String?   // relacionado a una materia
+  enrollmentId    String?   
   enrollment      Enrollment? @relation(fields: [enrollmentId], references: [id])
 
   createdAt       DateTime  @default(now())
