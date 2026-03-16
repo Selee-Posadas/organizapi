@@ -16,6 +16,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { AuthGuard } from './infrastructure/guards/auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateProfileUseCase } from './application/use-cases/update-profile.use-case';
+import { CheckAuthStatusUseCase } from './application/use-cases/check-auth-status.use-case';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +24,7 @@ export class AuthController {
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly loginUseCase: LoginUseCase,
     private readonly updateProfileUseCase: UpdateProfileUseCase,
+    private readonly checkAuthStatusUseCase: CheckAuthStatusUseCase,
   ) {}
 
   @Post('register')
@@ -90,13 +92,19 @@ export class AuthController {
     }
   }
 
-  //esto es de prueba, despues borrar
-  @Get('profile')
+  @Get('check-status')
   @UseGuards(AuthGuard)
-  async getProfile(@Req() req) {
+  async checkStatus(@Req() req) {
+    const { user, accessToken } = await this.checkAuthStatusUseCase.execute(
+      req.user.id,
+    );
+
+    const { passwordHash, ...safeUser } = user;
+
     return {
-      message: 'Esto es una prueba de perfil protegido',
-      user: req.user,
+      message: 'Session is valid',
+      user: safeUser,
+      token: accessToken,
     };
   }
 }

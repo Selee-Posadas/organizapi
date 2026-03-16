@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtAdapter } from './infrastructure/adapters/jwt.adapter';
 import { AuthTokenService } from './domain/ports/auth-token-service.interface';
 import { UpdateProfileUseCase } from './application/use-cases/update-profile.use-case';
+import { CheckAuthStatusUseCase } from './application/use-cases/check-auth-status.use-case';
 
 @Module({
   controllers: [AuthController],
@@ -33,6 +34,7 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
     RegisterUserUseCase,
     LoginUseCase,
     UpdateProfileUseCase,
+    CheckAuthStatusUseCase,
 
     PrismaService,
   ],
@@ -57,6 +59,7 @@ import { UpdateProfileUseCase } from './application/use-cases/update-profile.use
     LoginUseCase,
     'AuthTokenService',
     UpdateProfileUseCase,
+    CheckAuthStatusUseCase,
   ],
 })
 export class AuthModule {}
